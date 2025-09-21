@@ -164,6 +164,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     backgroundColor: 'rgba(0,0,0,0.2)',
     zIndex: 2000,
+    elevation: 20, // ensure above watermark on Android
   },
   panel: {
     backgroundColor: '#FFFFFF',

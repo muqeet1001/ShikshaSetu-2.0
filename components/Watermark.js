@@ -24,7 +24,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 0, // behind cards but above parent background
+    zIndex: 1000, // above cards
+    elevation: 6, // ensure above cards on Android (cards use elevation 4)
   },
   image: {
     width: BASE_SIZE,
