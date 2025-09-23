@@ -108,7 +108,7 @@ const SplashScreen = () => {
         </View>
         
         {/* App Name */}
-        <Text style={styles.appName}>urooj</Text>
+        <Text style={styles.appName}>Urooj</Text>
         
         {/* Government of Jammu and Kashmir text */}
         <Text style={styles.govText}>Government of Jammu and Kashmir</Text>
@@ -168,7 +168,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#FFFFFF',
     marginBottom: 10,
-    textTransform: 'lowercase',
     letterSpacing: 1,
   },
   govText: {

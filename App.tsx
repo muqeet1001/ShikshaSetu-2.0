@@ -3,9 +3,11 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import SplashScreen from './components/SplashScreen';
 import MainScreen from './components/MainScreen';
+import AuthGate from './components/AuthGate';
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
+  const [showAuth, setShowAuth] = useState(true);
 
   useEffect(() => {
     // Show splash screen for 3 seconds
@@ -18,7 +20,13 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {showSplash ? <SplashScreen /> : <MainScreen />}
+      {showSplash ? (
+        <SplashScreen />
+      ) : showAuth ? (
+        <AuthGate onDone={() => setShowAuth(false)} />
+      ) : (
+        <MainScreen />
+      )}
       <StatusBar style="light" />
     </View>
   );

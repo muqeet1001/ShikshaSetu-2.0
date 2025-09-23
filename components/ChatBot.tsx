@@ -34,7 +34,7 @@ const ChatBot = ({ visible, onClose, onNavigate }: ChatBotProps) => {
           const hist = JSON.parse(raw);
           setMessages(hist);
         } else {
-          const first = [{ role: 'bot', text: BOT_GREETING, at: Date.now() }];
+          const first = [{ role: 'bot' as const, text: BOT_GREETING, at: Date.now() }];
           setMessages(first);
           await setItem('SS_CHAT_HISTORY', JSON.stringify(first));
         }
@@ -136,7 +136,7 @@ const ChatBot = ({ visible, onClose, onNavigate }: ChatBotProps) => {
           <View style={styles.quickRow}>
             <QuickChip icon="lightbulb-on-outline" label="Guidance" onPress={() => handleNavigate('guidance')} />
             <QuickChip icon="bookmark-outline" label="My Plan" onPress={() => handleNavigate('plan')} />
-            <QuickChip icon="delete-outline" label="Clear Chat" onPress={async () => { const init = [{ role: 'bot', text: BOT_GREETING, at: Date.now() }]; setMessages(init); await setItem('SS_CHAT_HISTORY', JSON.stringify(init)); }} />
+            <QuickChip icon="delete-outline" label="Clear Chat" onPress={async () => { const init = [{ role: 'bot' as const, text: BOT_GREETING, at: Date.now() }]; setMessages(init); await setItem('SS_CHAT_HISTORY', JSON.stringify(init)); }} />
           </View>
         </ScrollView>
 

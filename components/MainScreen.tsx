@@ -8,6 +8,7 @@ import UpdatesScreen from './UpdatesScreen';
 import Watermark from './Watermark';
 import ChatBot from './ChatBot';
 import { getItem } from '../utils/storage';
+import ProfileEditor from './ProfileEditor';
 
 const { width, height } = Dimensions.get('window');
 const AnimatedTouchableOpacity: any = Animated.createAnimatedComponent(TouchableOpacity);
@@ -19,6 +20,7 @@ const MainScreen = () => {
   const jump = useRef(new Animated.Value(0)).current;
   const [updatesBadge, setUpdatesBadge] = useState<{ unread: number; saved: number }>({ unread: 0, saved: 0 });
   const [chatOpen, setChatOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   useEffect(() => {
     const loop = Animated.loop(
@@ -49,6 +51,37 @@ const MainScreen = () => {
     };
   }, []);
 
+  const [userName, setUserName] = useState<string | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const raw = await getItem('SS_USER_PROFILE');
+        if (raw) {
+          const profile = JSON.parse(raw);
+          const currentUsername: string | null = profile?.username ? String(profile.username) : null;
+          const currentName: string | null = profile?.name ? String(profile.name) : null;
+          let friendly = currentUsername || currentName;
+          // If name is missing or looks like an email, derive from email
+          if (!friendly || /@/.test(friendly)) {
+            const email: string | null = profile?.email ? String(profile.email) : null;
+            if (email) {
+              const local = (email.split('@')[0] || '').replace(/[._-]+/g, ' ').trim();
+              if (local) {
+                friendly = local
+                  .split(' ')
+                  .filter(Boolean)
+                  .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+                  .join(' ');
+              }
+            }
+          }
+          if (friendly) setUserName(friendly);
+        }
+      } catch {}
+    })();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Watermark />
@@ -74,20 +107,52 @@ const MainScreen = () => {
           </TouchableOpacity>
           
           {/* Profile Icon */}
-          <TouchableOpacity style={styles.headerIcon}>
+          <TouchableOpacity style={styles.headerIcon} onPress={() => setProfileOpen(true)}>
             <MaterialCommunityIcons name="account-circle-outline" size={24} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
       </View>
 
       {/* Main Content Area */}
+      <ProfileEditor
+        visible={profileOpen}
+        onClose={() => setProfileOpen(false)}
+        onSaved={() => {
+          // refresh greeting immediately
+          (async () => {
+            try {
+              const raw = await getItem('SS_USER_PROFILE');
+              if (raw) {
+                const profile = JSON.parse(raw);
+                const currentUsername: string | null = profile?.username ? String(profile.username) : null;
+                const currentName: string | null = profile?.name ? String(profile.name) : null;
+                let friendly = currentUsername || currentName;
+                if (!friendly || /@/.test(friendly)) {
+                  const email: string | null = profile?.email ? String(profile.email) : null;
+                  if (email) {
+                    const local = (email.split('@')[0] || '').replace(/[._-]+/g, ' ').trim();
+                    if (local) {
+                      friendly = local
+                        .split(' ')
+                        .filter(Boolean)
+                        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+                        .join(' ');
+                    }
+                  }
+                }
+                if (friendly) setUserName(friendly);
+              }
+            } catch {}
+          })();
+        }}
+      />
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {activeTab === 'home' ? (
         <View style={styles.content}>
           {/* Welcome Section */}
           <View style={styles.welcomeSection}>
             <View style={styles.welcomeHeader}>
-              <Text style={styles.welcomeText}>👋 Hi, Student!</Text>
+              <Text style={styles.welcomeText}>👋 Hi, {userName ? userName.split(' ')[0] : 'Student'}!</Text>
               <TouchableOpacity style={styles.languageToggle}>
                 <MaterialIcons name="language" size={16} color="#1E3A5F" />
                 <Text style={styles.languageText}>EN</Text>
