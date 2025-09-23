@@ -180,12 +180,12 @@ const MainScreen = () => {
           <View style={styles.heroBanner}>
             <Text style={styles.heroTitle}>Your Future, Your Choice 🚀</Text>
             <Text style={styles.heroSub}>Discover careers, colleges & success paths</Text>
-            <View style={{ flexDirection: 'row', marginTop: 12 }}>
+            <View style={styles.heroBtnRow}>
               <TouchableOpacity style={styles.heroButton} onPress={() => setActiveTab('guidance')}>
                 <Text style={styles.heroButtonText}>🎯 Take the Career Quiz</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.heroButton, { marginLeft: 8 }]} onPress={() => setActiveTab('guidance')}>
-                <Text style={styles.heroButtonText}>📚 Explore Guidance</Text>
+              <TouchableOpacity style={styles.heroButton} onPress={() => setActiveTab('plan')}>
+                <Text style={styles.heroButtonText}>📁 Saved Plans</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -370,17 +370,18 @@ const styles = StyleSheet.create({
   },
   heroTitle: { color: '#FFFFFF', fontSize: 18, fontWeight: '800' },
   heroSub: { color: 'rgba(255,255,255,0.9)', marginTop: 6 },
+  heroBtnRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'stretch', marginTop: 12 },
   heroButton: {
-    alignSelf: 'flex-start',
-    marginTop: 12,
     backgroundColor: '#FFFFFF',
-    paddingHorizontal: 12,
+    paddingHorizontal: 10,
     paddingVertical: 8,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#D6DEE8',
+    width: '48%',
+    marginTop: 8,
   },
-  heroButtonText: { color: '#1E3A5F', fontWeight: '800' },
+  heroButtonText: { color: '#1E3A5F', fontWeight: '800', textAlign: 'center' },
 
   sectionCard: {
     backgroundColor: '#FFFFFF',

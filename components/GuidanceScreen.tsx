@@ -12,108 +12,117 @@ const Chip = ({ iconFamily: Icon, icon, label }: { iconFamily: any; icon: any; l
   </TouchableOpacity>
 );
 
+import MySkillsBot from './MySkillsBot';
+
 const GuidanceScreen = () => {
+  const [screen, setScreen] = React.useState<'home' | 'myskills'>('home');
   return (
     <View style={styles.container}>
-      {/* Title and Subtitle */}
-      <View style={styles.headerBlock}>
-        <Text style={styles.title}>Guidance</Text>
-        <Text style={styles.subtitle}>Choose your path easily</Text>
-      </View>
+      {screen === 'home' ? (
+        <>
+          {/* Title and Subtitle */}
+          <View style={styles.headerBlock}>
+            <Text style={styles.title}>Guidance</Text>
+            <Text style={styles.subtitle}>Choose your path easily</Text>
+          </View>
 
-      {/* Search */}
-      <View style={styles.searchBar}>
-        <MaterialIcons name="search" size={20} color="#888" style={{ marginRight: 8 }} />
-        <Text style={styles.searchText}>Find course, college, job...</Text>
-      </View>
+          {/* Search */}
+          <View style={styles.searchBar}>
+            <MaterialIcons name="search" size={20} color="#888" style={{ marginRight: 8 }} />
+            <Text style={styles.searchText}>Find course, college, job...</Text>
+          </View>
 
-      {/* Quick Help Grid */}
-      <View style={styles.grid}>
-        <TouchableOpacity style={styles.gridCard}>
-          <MaterialCommunityIcons name="target" size={28} color={NAVY} />
-          <Text style={styles.gridTitle}>My Skills</Text>
-          <Text style={styles.gridSub}>Quiz</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.gridCard}>
-          <MaterialCommunityIcons name="school-outline" size={28} color={NAVY} />
-          <Text style={styles.gridTitle}>After 10th</Text>
-          <Text style={styles.gridSub}>or 12th?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.gridCard}>
-          <MaterialCommunityIcons name={"route" as any} size={28} color={NAVY} />
-          <Text style={styles.gridTitle}>Careers</Text>
-          <Text style={styles.gridSub}>Roadmap</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.gridCard}>
-          <MaterialCommunityIcons name="clipboard-text-outline" size={28} color={NAVY} />
-          <Text style={styles.gridTitle}>Exams Info</Text>
-          <Text style={styles.gridSub}>Updates</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Career Spotlight */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Career Spotlight</Text>
-        <View style={styles.spotlightCard}>
-          <MaterialCommunityIcons name={"teach" as any} size={28} color="#FFFFFF" />
-          <View style={{ marginLeft: 12, flex: 1 }}>
-            <Text style={styles.spotlightTitle}>Teacher – How to become one</Text>
-            <TouchableOpacity>
-              <Text style={styles.linkText}>Know More →</Text>
+          {/* Quick Help Grid */}
+          <View style={styles.grid}>
+            <TouchableOpacity style={styles.gridCard} onPress={() => setScreen('myskills')}>
+              <MaterialCommunityIcons name="target" size={28} color={NAVY} />
+              <Text style={styles.gridTitle}>My Skills</Text>
+              <Text style={styles.gridSub}>AI Chat Quiz</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.gridCard}>
+              <MaterialCommunityIcons name="school-outline" size={28} color={NAVY} />
+              <Text style={styles.gridTitle}>After 10th</Text>
+              <Text style={styles.gridSub}>or 12th?</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.gridCard}>
+              <MaterialCommunityIcons name={"route" as any} size={28} color={NAVY} />
+              <Text style={styles.gridTitle}>Careers</Text>
+              <Text style={styles.gridSub}>Roadmap</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.gridCard}>
+              <MaterialCommunityIcons name="clipboard-text-outline" size={28} color={NAVY} />
+              <Text style={styles.gridTitle}>Exams Info</Text>
+              <Text style={styles.gridSub}>Updates</Text>
             </TouchableOpacity>
           </View>
-        </View>
-      </View>
 
-      {/* Explore Paths */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Explore Paths</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 8 }}>
-          <Chip iconFamily={MaterialIcons} icon="work-outline" label="Govt Jobs" />
-          <Chip iconFamily={MaterialCommunityIcons} icon="school-outline" label="Teacher" />
-          <Chip iconFamily={MaterialCommunityIcons} icon="hard-hat" label="Engineer" />
-          <Chip iconFamily={MaterialCommunityIcons} icon="stethoscope" label="Nurse" />
-          <Chip iconFamily={MaterialCommunityIcons} icon="bank" label="Banking" />
-          <Chip iconFamily={MaterialCommunityIcons} icon="shield-account" label="Police" />
-          <Chip iconFamily={MaterialCommunityIcons} icon="palette-outline" label="Arts" />
-          <Chip iconFamily={MaterialCommunityIcons} icon="tractor" label="Farmer-Tech" />
-        </ScrollView>
-      </View>
+          {/* Career Spotlight */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Career Spotlight</Text>
+            <View style={styles.spotlightCard}>
+              <MaterialCommunityIcons name={"teach" as any} size={28} color="#FFFFFF" />
+              <View style={{ marginLeft: 12, flex: 1 }}>
+                <Text style={styles.spotlightTitle}>Teacher – How to become one</Text>
+                <TouchableOpacity>
+                  <Text style={styles.linkText}>Know More →</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
 
-      {/* Upcoming Important Dates */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Upcoming Important Dates</Text>
-        <View style={styles.listCard}>
-          <View style={styles.listItem}>
-            <MaterialCommunityIcons name="calendar" size={18} color={NAVY} />
-            <Text style={styles.listText}>Scholarship deadline – Nov 15</Text>
+          {/* Explore Paths */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Explore Paths</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 8 }}>
+              <Chip iconFamily={MaterialIcons} icon="work-outline" label="Govt Jobs" />
+              <Chip iconFamily={MaterialCommunityIcons} icon="school-outline" label="Teacher" />
+              <Chip iconFamily={MaterialCommunityIcons} icon="hard-hat" label="Engineer" />
+              <Chip iconFamily={MaterialCommunityIcons} icon="stethoscope" label="Nurse" />
+              <Chip iconFamily={MaterialCommunityIcons} icon="bank" label="Banking" />
+              <Chip iconFamily={MaterialCommunityIcons} icon="shield-account" label="Police" />
+              <Chip iconFamily={MaterialCommunityIcons} icon="palette-outline" label="Arts" />
+              <Chip iconFamily={MaterialCommunityIcons} icon="tractor" label="Farmer-Tech" />
+            </ScrollView>
           </View>
-          <View style={styles.listItem}>
-            <MaterialCommunityIcons name="calendar" size={18} color={NAVY} />
-            <Text style={styles.listText}>Polytechnic entrance – Dec 20</Text>
-          </View>
-          <View style={styles.listItem}>
-            <MaterialCommunityIcons name="calendar" size={18} color={NAVY} />
-            <Text style={styles.listText}>Govt Exam application – Jan 10</Text>
-          </View>
-          <TouchableOpacity style={{ marginTop: 8, alignSelf: 'flex-start' }}>
-            <Text style={styles.linkText}>View All Dates →</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
 
-      {/* Resources */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Resources</Text>
-        <View style={styles.resourceRow}>
-          <MaterialCommunityIcons name="play-circle-outline" size={22} color={NAVY} />
-          <Text style={styles.resourceText}>Video: "Why Graduation Matters"</Text>
-        </View>
-        <View style={styles.resourceRow}>
-          <MaterialCommunityIcons name="file-document-outline" size={22} color={NAVY} />
-          <Text style={styles.resourceText}>Article: "Scholarships You Can Apply"</Text>
-        </View>
-      </View>
+          {/* Upcoming Important Dates */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Upcoming Important Dates</Text>
+            <View style={styles.listCard}>
+              <View style={styles.listItem}>
+                <MaterialCommunityIcons name="calendar" size={18} color={NAVY} />
+                <Text style={styles.listText}>Scholarship deadline – Nov 15</Text>
+              </View>
+              <View style={styles.listItem}>
+                <MaterialCommunityIcons name="calendar" size={18} color={NAVY} />
+                <Text style={styles.listText}>Polytechnic entrance – Dec 20</Text>
+              </View>
+              <View style={styles.listItem}>
+                <MaterialCommunityIcons name="calendar" size={18} color={NAVY} />
+                <Text style={styles.listText}>Govt Exam application – Jan 10</Text>
+              </View>
+              <TouchableOpacity style={{ marginTop: 8, alignSelf: 'flex-start' }}>
+                <Text style={styles.linkText}>View All Dates →</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* Resources */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Resources</Text>
+            <View style={styles.resourceRow}>
+              <MaterialCommunityIcons name="play-circle-outline" size={22} color={NAVY} />
+              <Text style={styles.resourceText}>Video: "Why Graduation Matters"</Text>
+            </View>
+            <View style={styles.resourceRow}>
+              <MaterialCommunityIcons name="file-document-outline" size={22} color={NAVY} />
+              <Text style={styles.resourceText}>Article: "Scholarships You Can Apply"</Text>
+            </View>
+          </View>
+        </>
+      ) : (
+        <MySkillsBot onBack={() => setScreen('home')} />
+      )}
     </View>
   );
 };
