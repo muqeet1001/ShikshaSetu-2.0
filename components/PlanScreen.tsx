@@ -7,7 +7,7 @@ const NAVY = '#1E3A5F';
 const NAVY_DARK = '#0F2A3F';
 
 const PlanScreen = () => {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<Array<{ type: 'course' | 'college'; item: any }>>([]);
 
   const load = async () => {
     try {
@@ -21,7 +21,7 @@ const PlanScreen = () => {
 
   useEffect(() => { load(); }, []);
 
-  const remove = async (id) => {
+  const remove = async (id: string) => {
     const next = items.filter(x => x.item.id !== id);
     setItems(next);
     await setItem('SS_MY_PLAN', JSON.stringify(next));

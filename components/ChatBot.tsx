@@ -8,17 +8,23 @@ const NAVY_DARK = '#0F2A3F';
 
 const BOT_GREETING = "Hi! I'm your Shikshasetu assistant. Ask me about courses, colleges, scholarships, exams, or guidance. You can also say: 'open courses', 'open colleges', 'show updates', or 'my plan'.";
 
-const QuickChip = ({ icon, label, onPress }) => (
+const QuickChip = ({ icon, label, onPress }: { icon: any; label: string; onPress?: () => void }) => (
   <TouchableOpacity onPress={onPress} style={styles.chip}>
     <MaterialCommunityIcons name={icon} size={16} color={NAVY} />
     <Text style={styles.chipText}>{label}</Text>
   </TouchableOpacity>
 );
 
-const ChatBot = ({ visible, onClose, onNavigate }) => {
+interface ChatBotProps {
+  visible: boolean;
+  onClose?: () => void;
+  onNavigate?: (tab: string) => void;
+}
+
+const ChatBot = ({ visible, onClose, onNavigate }: ChatBotProps) => {
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState([]);
-  const scrollRef = useRef(null);
+  const [messages, setMessages] = useState<Array<{ role: 'user' | 'bot'; text: string; at: number }>>([]);
+  const scrollRef = useRef<ScrollView | null>(null);
 
   useEffect(() => {
     if (visible) {
@@ -42,20 +48,20 @@ const ChatBot = ({ visible, onClose, onNavigate }) => {
     }
   }, [messages, visible]);
 
-  const save = async (list) => setItem('SS_CHAT_HISTORY', JSON.stringify(list)).catch(()=>{});
+  const save = async (list: Array<{ role: 'user' | 'bot'; text: string; at: number }>) => setItem('SS_CHAT_HISTORY', JSON.stringify(list)).catch(()=>{});
 
-  const addMessage = async (role, text) => {
+  const addMessage = async (role: 'user' | 'bot', text: string) => {
     const next = [...messages, { role, text, at: Date.now() }];
     setMessages(next);
     await save(next);
   };
 
-  const handleNavigate = (tab) => {
+  const handleNavigate = (tab: string) => {
     onClose?.();
     onNavigate?.(tab);
   };
 
-  const reply = async (userText) => {
+  const reply = async (userText: string) => {
     const t = userText.trim().toLowerCase();
     // Simple intent detection
     if (t.includes('course')) {

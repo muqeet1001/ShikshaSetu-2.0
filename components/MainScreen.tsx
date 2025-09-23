@@ -10,12 +10,14 @@ import ChatBot from './ChatBot';
 import { getItem } from '../utils/storage';
 
 const { width, height } = Dimensions.get('window');
-const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+const AnimatedTouchableOpacity: any = Animated.createAnimatedComponent(TouchableOpacity);
+
+type TabKey = 'home' | 'guidance' | 'courses' | 'plan' | 'updates';
 
 const MainScreen = () => {
-  const [activeTab, setActiveTab] = useState('home');
+  const [activeTab, setActiveTab] = useState<TabKey>('home');
   const jump = useRef(new Animated.Value(0)).current;
-  const [updatesBadge, setUpdatesBadge] = useState({ unread: 0, saved: 0 });
+  const [updatesBadge, setUpdatesBadge] = useState<{ unread: number; saved: number }>({ unread: 0, saved: 0 });
   const [chatOpen, setChatOpen] = useState(false);
 
   useEffect(() => {
@@ -62,7 +64,7 @@ const MainScreen = () => {
             />
           </View>
           {/* App Name */}
-          <Text style={styles.headerTitle}>Shikshasetu</Text>
+          <Text style={styles.headerTitle}>Urooj</Text>
         </View>
         
         <View style={styles.headerRight}>
@@ -237,7 +239,7 @@ const MainScreen = () => {
       )}
 
       {/* ChatBot Panel */}
-      <ChatBot visible={chatOpen} onClose={() => setChatOpen(false)} onNavigate={(tab) => { setChatOpen(false); setActiveTab(tab); }} />
+      <ChatBot visible={chatOpen} onClose={() => setChatOpen(false)} onNavigate={(tab) => { setChatOpen(false); setActiveTab(tab as TabKey); }} />
 
       {/* Bottom Navigation */}
       <View style={styles.bottomNav}>

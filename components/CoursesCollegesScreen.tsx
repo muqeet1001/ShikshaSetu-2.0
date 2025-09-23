@@ -6,13 +6,13 @@ import { getItem, setItem } from '../utils/storage';
 const NAVY = '#1E3A5F';
 const NAVY_DARK = '#0F2A3F';
 
-const Pill = ({ label, active, onPress }) => (
+const Pill = ({ label, active, onPress }: { label: string; active?: boolean; onPress?: () => void }) => (
   <TouchableOpacity style={[styles.pill, active && styles.pillActive]} onPress={onPress}>
     <Text style={[styles.pillText, active && styles.pillTextActive]}>{label}</Text>
   </TouchableOpacity>
 );
 
-const ActionButton = ({ label, onPress }) => (
+const ActionButton = ({ label, onPress }: { label: string; onPress?: () => void }) => (
   <TouchableOpacity style={styles.actionBtn} onPress={onPress}>
     <Text style={styles.actionBtnText}>{label}</Text>
   </TouchableOpacity>
@@ -69,7 +69,7 @@ const collegesData = [
 ];
 
 // Sample alumni data keyed by college and district
-const alumniData = {
+const alumniData: Record<string, Record<string, Array<{ id: string; name: string; year: string; currentRole: string; employer: string; linkedin: string; x: string }>>> = {
   gsc_mumbai: {
     Jammu: [
       { id: 'al_j1', name: 'Imran Ahmed', year: '2021', currentRole: 'Software Engineer', employer: 'JK Bank IT', linkedin: 'https://www.linkedin.com/in/example-imran', x: 'https://x.com/example_imran' },
@@ -90,12 +90,12 @@ const alumniData = {
 };
 
 const CoursesCollegesScreen = () => {
-  const [screen, setScreen] = useState('courses'); // 'courses' | 'colleges' | 'courseDetail' | 'collegeDetail' | 'compare' | 'map' | 'alumniList' | 'alumniProfile'
-  const [selectedCourse, setSelectedCourse] = useState(null);
-  const [selectedCollege, setSelectedCollege] = useState(null);
-  const [selectedAlumni, setSelectedAlumni] = useState(null);
-  const [compareList, setCompareList] = useState([]); // items: {type: 'course'|'college', item}
-  const [myPlan, setMyPlan] = useState([]); // persisted plan items
+  const [screen, setScreen] = useState<'courses' | 'colleges' | 'courseDetail' | 'collegeDetail' | 'compare' | 'map' | 'alumniList' | 'alumniProfile'>('courses');
+  const [selectedCourse, setSelectedCourse] = useState<any>(null);
+  const [selectedCollege, setSelectedCollege] = useState<any>(null);
+  const [selectedAlumni, setSelectedAlumni] = useState<any>(null);
+  const [compareList, setCompareList] = useState<Array<{ type: 'course' | 'college'; item: any }>>([]);
+  const [myPlan, setMyPlan] = useState<Array<{ type: 'course' | 'college'; item: any }>>([]);
 
   // Course filters
   const streamOptions = ['All', 'Science', 'Arts', 'Commerce'];
@@ -133,7 +133,7 @@ const CoursesCollegesScreen = () => {
     setItem('SS_COMPARE', JSON.stringify(compareList)).catch(() => {});
   }, [compareList]);
 
-  const addToCompare = (type, item) => {
+  const addToCompare = (type: 'course' | 'college', item: any) => {
     setCompareList(prev => {
       const exists = prev.find(x => x.type === type && x.item.id === item.id);
       if (exists) return prev; // avoid duplicates
@@ -143,7 +143,7 @@ const CoursesCollegesScreen = () => {
     });
   };
 
-  const addToPlan = (type, item) => {
+  const addToPlan = (type: 'course' | 'college', item: any) => {
     setMyPlan(prev => {
       const exists = prev.find(x => x.type === type && x.item.id === item.id);
       if (exists) return prev;
@@ -152,9 +152,9 @@ const CoursesCollegesScreen = () => {
     });
   };
 
-  const removeFromCompare = (id) => setCompareList(prev => prev.filter(x => x.item.id !== id));
+  const removeFromCompare = (id: string) => setCompareList(prev => prev.filter(x => x.item.id !== id));
 
-  const CourseCard = ({ c }) => (
+const CourseCard: React.FC<{ c: any }> = ({ c }) => (
     <View style={styles.card}>
       <Text style={styles.cardTitle}>{c.name}</Text>
       <Text style={styles.cardLine}>Stream: {c.stream}</Text>
@@ -167,7 +167,7 @@ const CoursesCollegesScreen = () => {
     </View>
   );
 
-  const CollegeCard = ({ col }) => (
+const CollegeCard: React.FC<{ col: any }> = ({ col }) => (
     <View style={styles.card}>
       <Text style={styles.cardTitle}>{col.name}</Text>
       <Text style={styles.cardLine}>Courses: {col.courses.join(', ')}</Text>
@@ -296,15 +296,15 @@ const CoursesCollegesScreen = () => {
       <Text style={styles.detailLine}>Stream: {selectedCourse?.stream}</Text>
       <Text style={styles.detailLine}>Eligibility: {selectedCourse?.eligibility}</Text>
       <Text style={styles.detailSubTitle}>Career Paths</Text>
-      {selectedCourse?.careers.map((c,i) => (<Text key={i} style={styles.bullet}>• {c}</Text>))}
+      {selectedCourse?.careers.map((c: string, i: number) => (<Text key={i} style={styles.bullet}>• {c}</Text>))}
       <Text style={styles.detailSubTitle}>Higher Studies Options</Text>
-      {selectedCourse?.higherStudies.map((h,i) => (<Text key={i} style={styles.bullet}>• {h}</Text>))}
+      {selectedCourse?.higherStudies.map((h: string, i: number) => (<Text key={i} style={styles.bullet}>• {h}</Text>))}
       <Text style={styles.detailSubTitle}>Scholarships Available</Text>
-      {selectedCourse?.scholarships.map((s,i) => (<Text key={i} style={styles.bullet}>• {s}</Text>))}
+      {selectedCourse?.scholarships.map((s: string, i: number) => (<Text key={i} style={styles.bullet}>• {s}</Text>))}
       <Text style={styles.detailSubTitle}>Skill Courses & Resources</Text>
-      {selectedCourse?.resources.map((r,i) => (<Text key={i} style={styles.bullet}>• {r}</Text>))}
+      {selectedCourse?.resources.map((r: string, i: number) => (<Text key={i} style={styles.bullet}>• {r}</Text>))}
       <Text style={styles.detailSubTitle}>Nearby Colleges Offering Course</Text>
-      {selectedCourse?.nearbyColleges.map((n,i) => (<Text key={i} style={styles.bullet}>• {n}</Text>))}
+      {selectedCourse?.nearbyColleges.map((n: string, i: number) => (<Text key={i} style={styles.bullet}>• {n}</Text>))}
       <View style={[styles.cardActions, { marginTop: 16 }]}>
         <ActionButton label="Add to My Plan" onPress={() => addToPlan('course', selectedCourse)} />
         <ActionButton label="Compare" onPress={() => addToCompare('course', selectedCourse)} />
@@ -322,11 +322,11 @@ const CoursesCollegesScreen = () => {
       <Text style={styles.detailLine}>Address: {selectedCollege?.address}</Text>
       <Text style={styles.detailLine}>Distance: {selectedCollege?.distance}</Text>
       <Text style={styles.detailSubTitle}>Courses Offered</Text>
-      {selectedCollege?.courses.map((c,i) => (<Text key={i} style={styles.bullet}>• {c}</Text>))}
+      {selectedCollege?.courses.map((c: string, i: number) => (<Text key={i} style={styles.bullet}>• {c}</Text>))}
       <Text style={styles.detailSubTitle}>Eligibility / Cut-offs</Text>
       <Text style={styles.bullet}>• General cut-off: {selectedCollege?.cutoff}</Text>
       <Text style={styles.detailSubTitle}>Facilities</Text>
-      {selectedCollege?.facilities.map((f,i) => (<Text key={i} style={styles.bullet}>• {f}</Text>))}
+      {selectedCollege?.facilities.map((f: string, i: number) => (<Text key={i} style={styles.bullet}>• {f}</Text>))}
       <Text style={styles.detailSubTitle}>Nearby Scholarships</Text>
       <Text style={styles.bullet}>• Govt Merit Scholarship</Text>
       <View style={[styles.cardActions, { marginTop: 16 }]}>
@@ -373,7 +373,7 @@ const CoursesCollegesScreen = () => {
   );
 
   const effectiveDistrict = useMemo(() => (districtIdx === 0 ? 'Jammu' : districtOptions[districtIdx]), [districtIdx]);
-  const getAlumniFor = (collegeId) => (alumniData[collegeId]?.[effectiveDistrict] || []);
+  const getAlumniFor = (collegeId?: string) => (collegeId ? (alumniData[collegeId]?.[effectiveDistrict] || []) : []);
 
   const renderAlumniList = () => (
     <View>
@@ -385,10 +385,10 @@ const CoursesCollegesScreen = () => {
       {getAlumniFor(selectedCollege?.id).length === 0 ? (
         <Text style={styles.detailLine}>No alumni data yet for this district. Try changing the district filter.</Text>
       ) : (
-        getAlumniFor(selectedCollege?.id).map(al => (
+        getAlumniFor(selectedCollege?.id).map((al: any) => (
           <View key={al.id} style={styles.alumniCard}>
             <View style={styles.alumniLeft}>
-              <View style={styles.avatar}><Text style={styles.avatarText}>{al.name.split(' ').map(p=>p[0]).slice(0,2).join('').toUpperCase()}</Text></View>
+              <View style={styles.avatar}><Text style={styles.avatarText}>{al.name.split(' ').map((p: string)=>p[0]).slice(0,2).join('').toUpperCase()}</Text></View>
               <View>
                 <Text style={styles.alumniName}>{al.name} · Class of {al.year}</Text>
                 <Text style={styles.alumniMeta}>{al.currentRole} at {al.employer}</Text>
@@ -408,7 +408,7 @@ const CoursesCollegesScreen = () => {
         <Text style={styles.backText}>Back</Text>
       </TouchableOpacity>
       <View style={styles.alumniProfileHeader}>
-        <View style={styles.avatarLg}><Text style={styles.avatarTextLg}>{selectedAlumni?.name.split(' ').map(p=>p[0]).slice(0,2).join('').toUpperCase()}</Text></View>
+        <View style={styles.avatarLg}><Text style={styles.avatarTextLg}>{selectedAlumni?.name.split(' ').map((p: string)=>p[0]).slice(0,2).join('').toUpperCase()}</Text></View>
         <Text style={styles.alumniNameLg}>{selectedAlumni?.name}</Text>
         <Text style={styles.alumniMeta}>{selectedAlumni?.currentRole} at {selectedAlumni?.employer}</Text>
         <Text style={styles.alumniMeta}>Alumnus of {selectedCollege?.name} · Class of {selectedAlumni?.year}</Text>

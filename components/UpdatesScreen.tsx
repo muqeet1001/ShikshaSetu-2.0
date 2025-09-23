@@ -53,13 +53,13 @@ const seededUpdates = [
   },
 ];
 
-const Pill = ({ label, active, onPress }) => (
+const Pill: React.FC<{ label: string; active?: boolean; onPress?: () => void }> = ({ label, active, onPress }) => (
   <TouchableOpacity style={[styles.pill, active && styles.pillActive]} onPress={onPress}>
     <Text style={[styles.pillText, active && styles.pillTextActive]}>{label}</Text>
   </TouchableOpacity>
 );
 
-const UpdateCard = ({ u, onPress, onPrimary, onSecondary }) => (
+const UpdateCard: React.FC<{ u: any; onPress?: () => void; onPrimary?: () => void; onSecondary?: () => void }> = ({ u, onPress, onPrimary, onSecondary }) => (
   <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.9}>
     <View style={{ marginBottom: 6 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -94,11 +94,11 @@ const UpdateCard = ({ u, onPress, onPrimary, onSecondary }) => (
 
 const UpdatesScreen = () => {
   const [filterIdx, setFilterIdx] = useState(0);
-  const [readIds, setReadIds] = useState([]); // array of update ids
-  const [savedIds, setSavedIds] = useState([]); // array of update ids
-  const [detail, setDetail] = useState(null); // update object
-  const [mode, setMode] = useState('feed'); // 'feed' | 'saved' | 'timeline'
-  const [timeline, setTimeline] = useState([]); // [{id, at}]
+  const [readIds, setReadIds] = useState<string[]>([]); // array of update ids
+  const [savedIds, setSavedIds] = useState<string[]>([]); // array of update ids
+  const [detail, setDetail] = useState<any>(null); // update object
+  const [mode, setMode] = useState<'feed' | 'saved' | 'timeline'>('feed');
+  const [timeline, setTimeline] = useState<Array<{id: string; at: number}>>([]);
 
   // load saved/read
   useEffect(() => {
@@ -141,12 +141,12 @@ const UpdatesScreen = () => {
     Alert.alert('Marked as read', 'All updates marked as read.');
   };
 
-  const saveUpdate = (u) => {
+  const saveUpdate = (u: any) => {
     setSavedIds(prev => prev.includes(u.id) ? prev : [...prev, u.id]);
     Alert.alert('Saved', 'Update saved to bookmarks.');
   };
 
-  const addToTimeline = (u) => {
+  const addToTimeline = (u: any) => {
     setTimeline(prev => {
       const next = [...prev, { id: u.id, at: Date.now() }];
       return next;
@@ -154,14 +154,14 @@ const UpdatesScreen = () => {
     Alert.alert('Added', 'Added to your timeline.');
   };
 
-  const openPrimary = (u) => {
+  const openPrimary = (u: any) => {
     if (u.type === 'Tips' && u.readMoreUrl) return Linking.openURL(u.readMoreUrl);
     if (u.type === 'Exams') return addToTimeline(u);
     if (u.applyUrl) return Linking.openURL(u.applyUrl);
     Alert.alert('Info', 'No link available.');
   };
 
-  const openShare = async (u) => {
+  const openShare = async (u: any) => {
     try {
       await Share.share({ message: `${u.title}\n${u.description || ''}`.trim() });
     } catch {}
@@ -185,7 +185,7 @@ const UpdatesScreen = () => {
       {detail.importantDates && detail.importantDates.length > 0 && (
         <>
           <Text style={styles.sectionTitle}>Important Dates</Text>
-          {detail.importantDates.map((d, i) => (
+          {detail.importantDates.map((d: any, i: number) => (
             <Text key={i} style={styles.cardLine}>• {d.label}: {d.value}</Text>
           ))}
         </>

@@ -5,7 +5,7 @@ import { MaterialCommunityIcons, Ionicons, MaterialIcons } from '@expo/vector-ic
 const NAVY = '#1E3A5F';
 const NAVY_DARK = '#0F2A3F';
 
-const Chip = ({ iconFamily: Icon, icon, label }) => (
+const Chip = ({ iconFamily: Icon, icon, label }: { iconFamily: any; icon: any; label: string }) => (
   <TouchableOpacity style={styles.chip}>
     <Icon name={icon} size={18} color={NAVY} />
     <Text style={styles.chipLabel}>{label}</Text>
@@ -40,7 +40,7 @@ const GuidanceScreen = () => {
           <Text style={styles.gridSub}>or 12th?</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.gridCard}>
-          <MaterialCommunityIcons name="route" size={28} color={NAVY} />
+          <MaterialCommunityIcons name={"route" as any} size={28} color={NAVY} />
           <Text style={styles.gridTitle}>Careers</Text>
           <Text style={styles.gridSub}>Roadmap</Text>
         </TouchableOpacity>
@@ -55,7 +55,7 @@ const GuidanceScreen = () => {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Career Spotlight</Text>
         <View style={styles.spotlightCard}>
-          <MaterialCommunityIcons name="teach" size={28} color="#FFFFFF" />
+          <MaterialCommunityIcons name={"teach" as any} size={28} color="#FFFFFF" />
           <View style={{ marginLeft: 12, flex: 1 }}>
             <Text style={styles.spotlightTitle}>Teacher – How to become one</Text>
             <TouchableOpacity>
