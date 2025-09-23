@@ -13,9 +13,12 @@ const Chip = ({ iconFamily: Icon, icon, label }: { iconFamily: any; icon: any; l
 );
 
 import MySkillsBot from './MySkillsBot';
+import ScholarshipScreen from './ScholarshipScreen';
+import ThemeMatchedCareerScreen from './ThemeMatchedCareerScreen';
+import ResourcesHubScreen from './ResourcesHubScreen';
 
 const GuidanceScreen = () => {
-  const [screen, setScreen] = React.useState<'home' | 'myskills'>('home');
+  const [screen, setScreen] = React.useState<'home' | 'myskills' | 'scholarships' | 'careerRoadmap' | 'resources'>('home');
   return (
     <View style={styles.container}>
       {screen === 'home' ? (
@@ -39,70 +42,74 @@ const GuidanceScreen = () => {
               <Text style={styles.gridTitle}>My Skills</Text>
               <Text style={styles.gridSub}>AI Chat Quiz</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.gridCard}>
+            <TouchableOpacity style={styles.gridCard} onPress={() => setScreen('scholarships')}>
               <MaterialCommunityIcons name="school-outline" size={28} color={NAVY} />
+              <Text style={styles.gridTitle}>Scholarships</Text>
+              <Text style={styles.gridSub}>Find yours</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.gridCard} onPress={() => setScreen('careerRoadmap')}>
+              <MaterialCommunityIcons name="map" size={28} color={NAVY} />
               <Text style={styles.gridTitle}>After 10th</Text>
               <Text style={styles.gridSub}>or 12th?</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.gridCard}>
-              <MaterialCommunityIcons name={"route" as any} size={28} color={NAVY} />
-              <Text style={styles.gridTitle}>Careers</Text>
-              <Text style={styles.gridSub}>Roadmap</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.gridCard}>
-              <MaterialCommunityIcons name="clipboard-text-outline" size={28} color={NAVY} />
-              <Text style={styles.gridTitle}>Exams Info</Text>
-              <Text style={styles.gridSub}>Updates</Text>
+            <TouchableOpacity style={styles.gridCard} onPress={() => setScreen('resources')}>
+              <MaterialCommunityIcons name="book-open-page-variant" size={28} color={NAVY} />
+              <Text style={styles.gridTitle}>Resources Hub</Text>
+              <Text style={styles.gridSub}>Books & Tests</Text>
             </TouchableOpacity>
           </View>
 
-          {/* Career Spotlight */}
+          {/* Scholarship Spotlight */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Career Spotlight</Text>
+            <Text style={styles.sectionTitle}>Scholarship Spotlight</Text>
             <View style={styles.spotlightCard}>
-              <MaterialCommunityIcons name={"teach" as any} size={28} color="#FFFFFF" />
+              <MaterialCommunityIcons name="school" size={28} color="#FFFFFF" />
               <View style={{ marginLeft: 12, flex: 1 }}>
-                <Text style={styles.spotlightTitle}>Teacher – How to become one</Text>
-                <TouchableOpacity>
-                  <Text style={styles.linkText}>Know More →</Text>
+                <Text style={styles.spotlightTitle}>INSPIRE Scholarship – ₹80,000/year</Text>
+                <TouchableOpacity onPress={() => setScreen('scholarships')}>
+                  <Text style={styles.linkText}>Apply Now →</Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
 
-          {/* Explore Paths */}
+          {/* Scholarship Categories */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Explore Paths</Text>
+            <Text style={styles.sectionTitle}>Scholarship Categories</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 8 }}>
-              <Chip iconFamily={MaterialIcons} icon="work-outline" label="Govt Jobs" />
-              <Chip iconFamily={MaterialCommunityIcons} icon="school-outline" label="Teacher" />
-              <Chip iconFamily={MaterialCommunityIcons} icon="hard-hat" label="Engineer" />
-              <Chip iconFamily={MaterialCommunityIcons} icon="stethoscope" label="Nurse" />
-              <Chip iconFamily={MaterialCommunityIcons} icon="bank" label="Banking" />
-              <Chip iconFamily={MaterialCommunityIcons} icon="shield-account" label="Police" />
-              <Chip iconFamily={MaterialCommunityIcons} icon="palette-outline" label="Arts" />
-              <Chip iconFamily={MaterialCommunityIcons} icon="tractor" label="Farmer-Tech" />
+              <Chip iconFamily={MaterialIcons} icon="account-balance" label="Government" />
+              <Chip iconFamily={MaterialCommunityIcons} icon="office-building" label="Private" />
+              <Chip iconFamily={MaterialCommunityIcons} icon="school-outline" label="Merit Based" />
+              <Chip iconFamily={MaterialCommunityIcons} icon="account-group" label="Category" />
+              <Chip iconFamily={MaterialIcons} icon="female" label="Girl Child" />
+              <Chip iconFamily={MaterialCommunityIcons} icon="wheelchair-accessibility" label="Disability" />
+              <Chip iconFamily={MaterialCommunityIcons} icon="bank" label="Income Based" />
+              <Chip iconFamily={MaterialCommunityIcons} icon="flask-outline" label="Science" />
             </ScrollView>
           </View>
 
-          {/* Upcoming Important Dates */}
+          {/* Upcoming Scholarship Deadlines */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Upcoming Important Dates</Text>
+            <Text style={styles.sectionTitle}>Upcoming Scholarship Deadlines</Text>
             <View style={styles.listCard}>
               <View style={styles.listItem}>
                 <MaterialCommunityIcons name="calendar" size={18} color={NAVY} />
-                <Text style={styles.listText}>Scholarship deadline – Nov 15</Text>
+                <Text style={styles.listText}>INSPIRE Scholarship – Sept 30</Text>
               </View>
               <View style={styles.listItem}>
                 <MaterialCommunityIcons name="calendar" size={18} color={NAVY} />
-                <Text style={styles.listText}>Polytechnic entrance – Dec 20</Text>
+                <Text style={styles.listText}>Pre-Matric SC/ST – Oct 15</Text>
               </View>
               <View style={styles.listItem}>
                 <MaterialCommunityIcons name="calendar" size={18} color={NAVY} />
-                <Text style={styles.listText}>Govt Exam application – Jan 10</Text>
+                <Text style={styles.listText}>KVPY Registration – Nov 30</Text>
               </View>
-              <TouchableOpacity style={{ marginTop: 8, alignSelf: 'flex-start' }}>
-                <Text style={styles.linkText}>View All Dates →</Text>
+              <View style={styles.listItem}>
+                <MaterialCommunityIcons name="calendar" size={18} color={NAVY} />
+                <Text style={styles.listText}>Minority Scholarship – Dec 20</Text>
+              </View>
+              <TouchableOpacity style={{ marginTop: 8, alignSelf: 'flex-start' }} onPress={() => setScreen('scholarships')}>
+                <Text style={styles.linkText}>View All Scholarships →</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -118,10 +125,20 @@ const GuidanceScreen = () => {
               <MaterialCommunityIcons name="file-document-outline" size={22} color={NAVY} />
               <Text style={styles.resourceText}>Article: "Scholarships You Can Apply"</Text>
             </View>
+            <TouchableOpacity style={styles.resourceRow} onPress={() => setScreen('resources')}>
+              <MaterialCommunityIcons name="book-open-variant" size={22} color={NAVY} />
+              <Text style={styles.resourceText}>Complete Resources Hub →</Text>
+            </TouchableOpacity>
           </View>
         </>
-      ) : (
+      ) : screen === 'myskills' ? (
         <MySkillsBot onBack={() => setScreen('home')} />
+      ) : screen === 'scholarships' ? (
+        <ScholarshipScreen onBack={() => setScreen('home')} />
+      ) : screen === 'resources' ? (
+        <ResourcesHubScreen onBack={() => setScreen('home')} />
+      ) : (
+        <ThemeMatchedCareerScreen onBack={() => setScreen('home')} />
       )}
     </View>
   );
