@@ -164,119 +164,90 @@ const MainScreen = () => {
             </View>
           </View>
 
-          {/* Progress Tracker */}
-          <TouchableOpacity style={styles.progressSection}>
-            <View style={styles.progressHeader}>
-              <Text style={styles.progressTitle}>Your Profile: 70% complete</Text>
-              <MaterialIcons name="arrow-forward-ios" size={16} color="#1E3A5F" />
+          {/* Tile 1: Find my course */}
+          <View style={styles.tileCard}>
+            <Text style={styles.tileHeaderTitle}>Find my course</Text>
+            <Text style={styles.tileSubtitle}>“2‑minute picks → tailored courses”</Text>
+            <View style={styles.tileBtnRow}>
+              <TouchableOpacity style={styles.primaryBtn}><Text style={styles.primaryBtnText}>Start</Text></TouchableOpacity>
+              <TouchableOpacity style={styles.outlineBtn}><Text style={styles.outlineBtnText}>Text mode</Text></TouchableOpacity>
             </View>
-            <View style={styles.progressBarContainer}>
-              <View style={styles.progressBar}>
-                <View style={styles.progressFill} />
-              </View>
+            <View style={styles.chipsRow}>
+              {['Enjoy labs','Numbers','People','Hands-on','Design','Service'].map((c) => (
+                <View key={c} style={styles.chip}><Text style={styles.chipText}>{c}</Text></View>
+              ))}
             </View>
-            <Text style={styles.progressSubtext}>Complete profile to unlock better suggestions</Text>
-          </TouchableOpacity>
-
-          {/* Main Action Cards */}
-          <View style={styles.cardGrid}>
-            <TouchableOpacity style={styles.card}>
-              <MaterialIcons name="book" size={32} color="#1E3A5F" />
-              <Text style={styles.cardText}>Find My Course</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.card}>
-              <MaterialIcons name="trending-up" size={32} color="#1E3A5F" />
-              <Text style={styles.cardText}>Career Paths</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.card}>
-              <MaterialIcons name="location-on" size={32} color="#1E3A5F" />
-              <Text style={styles.cardText}>Nearby Colleges</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.card}>
-              <MaterialIcons name="school" size={32} color="#1E3A5F" />
-              <Text style={styles.cardText}>Scholarships</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Important Updates / Timeline Section */}
-          <View style={styles.updatesSection}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Upcoming Timeline</Text>
-              <TouchableOpacity>
-                <Text style={styles.viewAllText}>View All</Text>
-              </TouchableOpacity>
+            <View style={styles.microTask}>
+              <Text style={styles.microTaskText}>Micro‑task: Try 3‑line task (10 min timer)</Text>
             </View>
-            
-            <TouchableOpacity style={styles.updateCard}>
-              <View style={styles.updateIcon}>
-                <MaterialIcons name="school" size={20} color="#1E3A5F" />
-              </View>
-              <View style={styles.updateContent}>
-                <Text style={styles.updateTitle}>BA Admissions open – till 30 Sept</Text>
-                <Text style={styles.updateDate}>5 days remaining</Text>
-              </View>
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.updateCard}>
-              <View style={styles.updateIcon}>
-                <MaterialIcons name="emoji-events" size={20} color="#FFD700" />
-              </View>
-              <View style={styles.updateContent}>
-                <Text style={styles.updateTitle}>Scholarship result announcement</Text>
-                <Text style={styles.updateDate}>25 Sept, 2024</Text>
-              </View>
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.updateCard}>
-              <View style={styles.updateIcon}>
-                <MaterialIcons name="video-call" size={20} color="#28A745" />
-              </View>
-              <View style={styles.updateContent}>
-                <Text style={styles.updateTitle}>Career Counseling Webinar</Text>
-                <Text style={styles.updateDate}>25 Sept at 5 PM</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-
-          {/* Featured Section */}
-          <View style={styles.featuredSection}>
-            <Text style={styles.sectionTitle}>Featured</Text>
-            <View style={styles.featuredCard}>
-              <MaterialIcons name="emoji-events" size={24} color="#FFFFFF" />
-              <View style={styles.featuredContent}>
-                <Text style={styles.featuredTitle}>Scholarship of the Week</Text>
-                <Text style={styles.featuredSubtitle}>Merit-based scholarship for Engineering students</Text>
-              </View>
+            <View style={styles.resultCard}>
+              <Text style={styles.resultTitle}>Top matches: B.Sc Bio, B.Tech, B.Com</Text>
+              <Text style={styles.resultWhy}>Why: your picks + micro‑task engagement</Text>
+              <TouchableOpacity><Text style={styles.linkText}>See full list</Text></TouchableOpacity>
+              <Text style={styles.sourceStamp}>Source • Updated: 23 Sep</Text>
             </View>
           </View>
 
-          {/* Success Story Section */}
-          <View style={styles.successSection}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Success Stories</Text>
-              <TouchableOpacity>
-                <Text style={styles.viewAllText}>View All</Text>
-              </TouchableOpacity>
+          {/* Tile 2: Career path */}
+          <View style={styles.tileCard}>
+            <Text style={styles.tileHeaderTitle}>Career path</Text>
+            <Text style={styles.tileSubtitle}>“Visual flow + options if exam not cleared”</Text>
+            <View style={styles.tileBtnRow}>
+              <TouchableOpacity style={styles.primaryBtn}><Text style={styles.primaryBtnText}>Open Flow</Text></TouchableOpacity>
+              <TouchableOpacity style={styles.outlineBtn}><Text style={styles.outlineBtnText}>Text outline</Text></TouchableOpacity>
             </View>
-            <View style={styles.successCard}>
-              <MaterialIcons name="account-circle" size={40} color="#28A745" />
-              <View style={styles.successContent}>
-                <Text style={styles.successName}>Ritika from Govt. College X</Text>
-                <Text style={styles.successStory}>Cleared UPSC after BA - "Government colleges provided excellent foundation for my civil services preparation"</Text>
-                <Text style={styles.successTag}>🎆 UPSC Success</Text>
+            <View style={styles.flowThumb}>
+              <Text style={styles.flowText}>Start → Exam decision → Study → Roles</Text>
+              <View style={styles.chipsRow}>
+                {['Duration','Cost','Seats','Mobility'].map((c) => (
+                  <View key={c} style={styles.chip}><Text style={styles.chipText}>{c}</Text></View>
+                ))}
               </View>
+            </View>
+            <View>
+              {[{role:'Accounts Assistant'},{role:'Lab Technologist'},{role:'Field Technician'}].map((r) => (
+                <View key={r.role} style={styles.roleCard}>
+                  <Text style={styles.roleText}>• {r.role}</Text>
+                  <TouchableOpacity><Text style={styles.linkText}>View jobs</Text></TouchableOpacity>
+                </View>
+              ))}
+              <Text style={styles.sourceStamp}>Source: Role cards from NCS • Updated: 23 Sep</Text>
             </View>
           </View>
 
-          {/* Saved Items Quick Access */}
-          <TouchableOpacity style={styles.savedSection} onPress={() => setActiveTab('plan')}>
-            <MaterialIcons name="bookmark" size={20} color="#1E3A5F" />
-            <Text style={styles.savedText}>Your Saved Items</Text>
-            <MaterialIcons name="arrow-forward-ios" size={16} color="#1E3A5F" />
-          </TouchableOpacity>
+          {/* Tile 3: Nearby government colleges */}
+          <View style={styles.tileCard}>
+            <Text style={styles.tileHeaderTitle}>Nearby government colleges</Text>
+            <View style={styles.filtersRow}>
+              <View style={styles.filterChip}><Text style={styles.filterText}>District ▼</Text></View>
+              <View style={[styles.filterChip, styles.filterActive]}><Text style={[styles.filterText, styles.filterActiveText]}>Govt only ✓</Text></View>
+              <View style={styles.filterChip}><Text style={styles.filterText}>Fees ₹—₹</Text></View>
+              <View style={styles.filterChip}><Text style={styles.filterText}>Medium ▼</Text></View>
+            </View>
+            {[{name:'Govt College X',dist:'2.1 km',fees:'₹8.5k/yr',lang:'EN/HIN',fac:'Labs • Hostel • Library',alumni:['Priya','Aamir'],src:'AY 2024–25'},
+              {name:'Govt College Y',dist:'7.9 km',fees:'₹12k/yr',lang:'EN/HIN',fac:'Library • Sports',alumni:['Sameer'],src:'AY 2024–25'}].map((c,idx)=> (
+              <View key={idx} style={styles.collegeCard}>
+                <Text style={styles.collegeTitle}>{c.name} • {c.dist} • Fees {c.fees} • {c.lang}</Text>
+                <Text style={styles.collegeSub}>Facilities: {c.fac}</Text>
+                <Text style={styles.collegeSub}>From your district ({c.alumni.length}): {c.alumni.map(a => `${a} ✓`).join(', ')}</Text>
+                <Text style={styles.sourceStamp}>Source • Updated: {c.src}</Text>
+              </View>
+            ))}
+            <TouchableOpacity><Text style={styles.linkText}>See all colleges</Text></TouchableOpacity>
+          </View>
+
+          {/* Tile 4: Scholarships */}
+          <View style={styles.tileCard}>
+            <Text style={styles.tileHeaderTitle}>Scholarships (this week)</Text>
+            <View style={styles.schRow}>
+              <Text style={styles.schText}>• Post‑Matric: last date 30 Sep</Text>
+              <TouchableOpacity><Text style={styles.linkText}>Add reminder</Text></TouchableOpacity>
+            </View>
+            <Text style={styles.schText}>• Merit‑cum‑Means: window 01–15 Oct</Text>
+            <Text style={styles.schText}>• State aid: opens 05 Oct</Text>
+            <Text style={styles.sourceStamp}>Source • Updated: 23 Sep</Text>
+            <TouchableOpacity><Text style={styles.linkText}>View all • auto‑filter by district/caste/income</Text></TouchableOpacity>
+          </View>
         </View>
         ) : activeTab === 'guidance' ? (
           <GuidanceScreen />
@@ -758,6 +729,141 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: 'bold',
   },
+
+  /* Tiles */
+  tileCard: {
+    backgroundColor: '#FFFFFF',
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#D6DEE8',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  tileHeaderTitle: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: '#1E3A5F',
+  },
+  tileSubtitle: {
+    marginTop: 4,
+    color: '#475569',
+  },
+  tileBtnRow: {
+    flexDirection: 'row',
+    marginTop: 10,
+  },
+  primaryBtn: {
+    backgroundColor: '#1E3A5F',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 10,
+    marginRight: 8,
+  },
+  primaryBtnText: { color: '#FFFFFF', fontWeight: '800' },
+  outlineBtn: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#1E3A5F',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 10,
+  },
+  outlineBtnText: { color: '#1E3A5F', fontWeight: '800' },
+  chipsRow: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 10 },
+  chip: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    backgroundColor: '#F0F7FF',
+    borderWidth: 1,
+    borderColor: '#D6DEE8',
+    borderRadius: 14,
+    marginRight: 8,
+    marginTop: 8,
+  },
+  chipText: { color: '#1E3A5F', fontWeight: '700', fontSize: 12 },
+  microTask: {
+    marginTop: 12,
+    backgroundColor: '#FFF7ED',
+    borderColor: '#FED7AA',
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 10,
+  },
+  microTaskText: { color: '#9A3412', fontWeight: '600' },
+  resultCard: {
+    marginTop: 12,
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    padding: 10,
+    borderRadius: 10,
+  },
+  resultTitle: { color: '#0F172A', fontWeight: '700' },
+  resultWhy: { color: '#475569', marginTop: 2, marginBottom: 6 },
+  linkText: { color: '#1E3A5F', fontWeight: '700', textDecorationLine: 'underline' },
+  sourceStamp: { color: '#64748B', fontSize: 12, marginTop: 6 },
+
+  flowThumb: {
+    marginTop: 10,
+    backgroundColor: '#F1F5F9',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    padding: 10,
+    borderRadius: 10,
+  },
+  flowText: { color: '#334155', fontWeight: '600' },
+  roleCard: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    marginTop: 8,
+  },
+  roleText: { color: '#0F172A', fontWeight: '600' },
+
+  filtersRow: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 8 },
+  filterChip: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    backgroundColor: '#F8F9FA',
+    borderWidth: 1,
+    borderColor: '#D6DEE8',
+    borderRadius: 14,
+    marginRight: 8,
+    marginTop: 8,
+  },
+  filterActive: { backgroundColor: '#E3F2FF', borderColor: '#1E3A5F' },
+  filterText: { color: '#334155', fontWeight: '600', fontSize: 12 },
+  filterActiveText: { color: '#1E3A5F' },
+
+  collegeCard: {
+    marginTop: 10,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    padding: 10,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  collegeTitle: { color: '#0F172A', fontWeight: '700' },
+  collegeSub: { color: '#475569', marginTop: 2 },
+
+  schRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 },
+  schText: { color: '#0F172A' },
 });
 
 export default MainScreen;
