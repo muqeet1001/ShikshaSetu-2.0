@@ -164,89 +164,27 @@ const MainScreen = () => {
             </View>
           </View>
 
-          {/* Tile 1: Find my course */}
-          <View style={styles.tileCard}>
-            <Text style={styles.tileHeaderTitle}>Find my course</Text>
-            <Text style={styles.tileSubtitle}>“2‑minute picks → tailored courses”</Text>
-            <View style={styles.tileBtnRow}>
-              <TouchableOpacity style={styles.primaryBtn}><Text style={styles.primaryBtnText}>Start</Text></TouchableOpacity>
-              <TouchableOpacity style={styles.outlineBtn}><Text style={styles.outlineBtnText}>Text mode</Text></TouchableOpacity>
-            </View>
-            <View style={styles.chipsRow}>
-              {['Enjoy labs','Numbers','People','Hands-on','Design','Service'].map((c) => (
-                <View key={c} style={styles.chip}><Text style={styles.chipText}>{c}</Text></View>
-              ))}
-            </View>
-            <View style={styles.microTask}>
-              <Text style={styles.microTaskText}>Micro‑task: Try 3‑line task (10 min timer)</Text>
-            </View>
-            <View style={styles.resultCard}>
-              <Text style={styles.resultTitle}>Top matches: B.Sc Bio, B.Tech, B.Com</Text>
-              <Text style={styles.resultWhy}>Why: your picks + micro‑task engagement</Text>
-              <TouchableOpacity><Text style={styles.linkText}>See full list</Text></TouchableOpacity>
-              <Text style={styles.sourceStamp}>Source • Updated: 23 Sep</Text>
-            </View>
-          </View>
-
-          {/* Tile 2: Career path */}
-          <View style={styles.tileCard}>
-            <Text style={styles.tileHeaderTitle}>Career path</Text>
-            <Text style={styles.tileSubtitle}>“Visual flow + options if exam not cleared”</Text>
-            <View style={styles.tileBtnRow}>
-              <TouchableOpacity style={styles.primaryBtn}><Text style={styles.primaryBtnText}>Open Flow</Text></TouchableOpacity>
-              <TouchableOpacity style={styles.outlineBtn}><Text style={styles.outlineBtnText}>Text outline</Text></TouchableOpacity>
-            </View>
-            <View style={styles.flowThumb}>
-              <Text style={styles.flowText}>Start → Exam decision → Study → Roles</Text>
-              <View style={styles.chipsRow}>
-                {['Duration','Cost','Seats','Mobility'].map((c) => (
-                  <View key={c} style={styles.chip}><Text style={styles.chipText}>{c}</Text></View>
-                ))}
-              </View>
-            </View>
-            <View>
-              {[{role:'Accounts Assistant'},{role:'Lab Technologist'},{role:'Field Technician'}].map((r) => (
-                <View key={r.role} style={styles.roleCard}>
-                  <Text style={styles.roleText}>• {r.role}</Text>
-                  <TouchableOpacity><Text style={styles.linkText}>View jobs</Text></TouchableOpacity>
-                </View>
-              ))}
-              <Text style={styles.sourceStamp}>Source: Role cards from NCS • Updated: 23 Sep</Text>
-            </View>
-          </View>
-
-          {/* Tile 3: Nearby government colleges */}
-          <View style={styles.tileCard}>
-            <Text style={styles.tileHeaderTitle}>Nearby government colleges</Text>
-            <View style={styles.filtersRow}>
-              <View style={styles.filterChip}><Text style={styles.filterText}>District ▼</Text></View>
-              <View style={[styles.filterChip, styles.filterActive]}><Text style={[styles.filterText, styles.filterActiveText]}>Govt only ✓</Text></View>
-              <View style={styles.filterChip}><Text style={styles.filterText}>Fees ₹—₹</Text></View>
-              <View style={styles.filterChip}><Text style={styles.filterText}>Medium ▼</Text></View>
-            </View>
-            {[{name:'Govt College X',dist:'2.1 km',fees:'₹8.5k/yr',lang:'EN/HIN',fac:'Labs • Hostel • Library',alumni:['Priya','Aamir'],src:'AY 2024–25'},
-              {name:'Govt College Y',dist:'7.9 km',fees:'₹12k/yr',lang:'EN/HIN',fac:'Library • Sports',alumni:['Sameer'],src:'AY 2024–25'}].map((c,idx)=> (
-              <View key={idx} style={styles.collegeCard}>
-                <Text style={styles.collegeTitle}>{c.name} • {c.dist} • Fees {c.fees} • {c.lang}</Text>
-                <Text style={styles.collegeSub}>Facilities: {c.fac}</Text>
-                <Text style={styles.collegeSub}>From your district ({c.alumni.length}): {c.alumni.map(a => `${a} ✓`).join(', ')}</Text>
-                <Text style={styles.sourceStamp}>Source • Updated: {c.src}</Text>
-              </View>
-            ))}
-            <TouchableOpacity><Text style={styles.linkText}>See all colleges</Text></TouchableOpacity>
-          </View>
-
-          {/* Tile 4: Scholarships */}
-          <View style={styles.tileCard}>
-            <Text style={styles.tileHeaderTitle}>Scholarships (this week)</Text>
-            <View style={styles.schRow}>
-              <Text style={styles.schText}>• Post‑Matric: last date 30 Sep</Text>
-              <TouchableOpacity><Text style={styles.linkText}>Add reminder</Text></TouchableOpacity>
-            </View>
-            <Text style={styles.schText}>• Merit‑cum‑Means: window 01–15 Oct</Text>
-            <Text style={styles.schText}>• State aid: opens 05 Oct</Text>
-            <Text style={styles.sourceStamp}>Source • Updated: 23 Sep</Text>
-            <TouchableOpacity><Text style={styles.linkText}>View all • auto‑filter by district/caste/income</Text></TouchableOpacity>
+          {/* Main Action Grid (tappable) */}
+          <View style={styles.cardGrid}>
+            <TouchableOpacity style={styles.card} onPress={() => setActiveTab('courses')}>
+              <MaterialIcons name="book" size={32} color="#1E3A5F" />
+              <Text style={styles.cardText}>Find My Course</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity style={styles.card} onPress={() => setActiveTab('guidance')}>
+              <MaterialIcons name="trending-up" size={32} color="#1E3A5F" />
+              <Text style={styles.cardText}>Career Paths</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity style={styles.card} onPress={() => setActiveTab('courses')}>
+              <MaterialIcons name="location-on" size={32} color="#1E3A5F" />
+              <Text style={styles.cardText}>Nearby Colleges</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity style={styles.card} onPress={() => setActiveTab('updates')}>
+              <MaterialIcons name="school" size={32} color="#1E3A5F" />
+              <Text style={styles.cardText}>Scholarships</Text>
+            </TouchableOpacity>
           </View>
         </View>
         ) : activeTab === 'guidance' ? (
