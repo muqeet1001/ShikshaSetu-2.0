@@ -149,42 +149,39 @@ const MainScreen = () => {
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {activeTab === 'home' ? (
         <View style={styles.content}>
-          {/* Welcome Section */}
-          <View style={styles.welcomeSection}>
-            <View style={styles.welcomeHeader}>
-              <Text style={styles.welcomeText}>👋 Hi, {userName ? userName.split(' ')[0] : 'Student'}!</Text>
-              <TouchableOpacity style={styles.languageToggle}>
-                <MaterialIcons name="language" size={16} color="#1E3A5F" />
-                <Text style={styles.languageText}>EN</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.searchBar}>
-              <MaterialIcons name="search" size={20} color="#888" style={styles.searchIcon} />
-              <Text style={styles.searchText}>Search courses, colleges, scholarships...</Text>
-            </View>
+          {/* Hero Banner */}
+          <View style={styles.heroBanner}>
+            <Text style={styles.heroTitle}>Find Your Right Career Path</Text>
+            <Text style={styles.heroSub}>Personalized guidance to match your interests and strengths</Text>
+            <TouchableOpacity style={styles.heroButton} onPress={() => setActiveTab('guidance')}>
+              <Text style={styles.heroButtonText}>🎯 Take Career Quiz</Text>
+            </TouchableOpacity>
           </View>
 
-          {/* Main Action Grid (tappable) */}
-          <View style={styles.cardGrid}>
-            <TouchableOpacity style={styles.card} onPress={() => setActiveTab('courses')}>
-              <MaterialIcons name="book" size={32} color="#1E3A5F" />
-              <Text style={styles.cardText}>Find My Course</Text>
+          {/* Highlights */}
+          <View style={styles.sectionCard}>
+            <Text style={styles.sectionHeaderTitle}>🌟 Highlights</Text>
+            <View style={styles.highlightCard}><Text style={styles.highlightText}>Top Careers in Demand</Text></View>
+            <View style={styles.highlightCard}><Text style={styles.highlightText}>Upcoming Exam Deadlines</Text></View>
+            <View style={styles.highlightCard}><Text style={styles.highlightText}>Scholarships Available</Text></View>
+          </View>
+
+          {/* Dashboard Preview */}
+          <View style={styles.sectionCard}>
+            <Text style={styles.sectionHeaderTitle}>📊 Dashboard Preview</Text>
+            <Text style={styles.previewLine}>Exams: NEET → 15 Mar 2025</Text>
+            <Text style={styles.previewLine}>Colleges: NIT Srinagar</Text>
+            <Text style={styles.previewLine}>Updates: CBSE Results in May</Text>
+            <TouchableOpacity onPress={() => setActiveTab('plan')}>
+              <Text style={styles.linkText}>View More →</Text>
             </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.card} onPress={() => setActiveTab('guidance')}>
-              <MaterialIcons name="trending-up" size={32} color="#1E3A5F" />
-              <Text style={styles.cardText}>Career Paths</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.card} onPress={() => setActiveTab('courses')}>
-              <MaterialIcons name="location-on" size={32} color="#1E3A5F" />
-              <Text style={styles.cardText}>Nearby Colleges</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.card} onPress={() => setActiveTab('updates')}>
-              <MaterialIcons name="school" size={32} color="#1E3A5F" />
-              <Text style={styles.cardText}>Scholarships</Text>
-            </TouchableOpacity>
+          </View>
+
+          {/* Success Stories / Quotes */}
+          <View style={styles.sectionCard}>
+            <Text style={styles.sectionHeaderTitle}>🎓 Success Stories</Text>
+            <Text style={styles.quoteLine}>“Aisha: From J&K to AI Engineer”</Text>
+            <Text style={styles.quoteLine}>“Stay consistent, success comes”</Text>
           </View>
         </View>
         ) : activeTab === 'guidance' ? (
@@ -308,6 +305,59 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 20,
   },
+  heroBanner: {
+    backgroundColor: '#1E3A5F',
+    padding: 18,
+    borderRadius: 14,
+    marginTop: 16,
+    borderWidth: 1,
+    borderColor: '#0F2A3F',
+  },
+  heroTitle: { color: '#FFFFFF', fontSize: 18, fontWeight: '800' },
+  heroSub: { color: 'rgba(255,255,255,0.9)', marginTop: 6 },
+  heroButton: {
+    alignSelf: 'flex-start',
+    marginTop: 12,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#D6DEE8',
+  },
+  heroButtonText: { color: '#1E3A5F', fontWeight: '800' },
+
+  sectionCard: {
+    backgroundColor: '#FFFFFF',
+    padding: 16,
+    borderRadius: 12,
+    marginTop: 16,
+    borderWidth: 1,
+    borderColor: '#D6DEE8',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  sectionHeaderTitle: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: '#1E3A5F',
+    marginBottom: 10,
+  },
+  highlightCard: {
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    padding: 12,
+    borderRadius: 10,
+    marginTop: 8,
+  },
+  highlightText: { color: '#0F172A', fontWeight: '600' },
+
+  previewLine: { color: '#334155', marginTop: 4 },
+  quoteLine: { color: '#334155', marginTop: 6, fontStyle: 'italic' },
   welcomeSection: {
     backgroundColor: '#FFFFFF',
     padding: 16,
