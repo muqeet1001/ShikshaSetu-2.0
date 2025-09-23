@@ -53,6 +53,33 @@ const MainScreen = () => {
 
   const [userName, setUserName] = useState<string | null>(null);
 
+  // Data for new home sections
+  const successStories = [
+    { name: 'Aisha', tag: 'Engineer @ Google' },
+    { name: 'Umar', tag: 'Doctor @ AIIMS' },
+    { name: 'Sana', tag: 'Designer @ IIT Guwahati' },
+  ];
+  const newsFeed = [
+    '📢 NEET 2025 Registration Opens → Feb 1',
+    '🎯 Scholarships open for J&K girls → Apply now',
+    '🗓️ CBSE Results → May 2025',
+  ];
+  const localPool = [
+    '📍 From Baramulla Today: Fatima got into Google',
+    '💡 From Jammu: Bilal cracked UPSC!',
+    '📍 From Anantnag: Aamir placed at Infosys',
+    '💡 From Srinagar: Mehak won State Hackathon',
+  ];
+  const dayIdx = Math.floor((Date.now() / 86400000)) % localPool.length;
+  const localSpot1 = localPool[dayIdx];
+  const localSpot2 = localPool[(dayIdx + 1) % localPool.length];
+  const quotes = [
+    'Dream Big, Start Small.',
+    'Consistency beats intensity.',
+    'Every expert was once a beginner.',
+  ];
+  const quoteOfTheDay = quotes[dayIdx % quotes.length];
+
   useEffect(() => {
     (async () => {
       try {
@@ -149,39 +176,67 @@ const MainScreen = () => {
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {activeTab === 'home' ? (
         <View style={styles.content}>
-          {/* Hero Banner */}
+          {/* HERO SECTION */}
           <View style={styles.heroBanner}>
-            <Text style={styles.heroTitle}>Find Your Right Career Path</Text>
-            <Text style={styles.heroSub}>Personalized guidance to match your interests and strengths</Text>
-            <TouchableOpacity style={styles.heroButton} onPress={() => setActiveTab('guidance')}>
-              <Text style={styles.heroButtonText}>🎯 Take Career Quiz</Text>
+            <Text style={styles.heroTitle}>Your Future, Your Choice 🚀</Text>
+            <Text style={styles.heroSub}>Discover careers, colleges & success paths</Text>
+            <View style={{ flexDirection: 'row', marginTop: 12 }}>
+              <TouchableOpacity style={styles.heroButton} onPress={() => setActiveTab('guidance')}>
+                <Text style={styles.heroButtonText}>🎯 Take the Career Quiz</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.heroButton, { marginLeft: 8 }]} onPress={() => setActiveTab('guidance')}>
+                <Text style={styles.heroButtonText}>📚 Explore Guidance</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* WHY EDUCATION MATTERS */}
+          <View style={styles.sectionCard}>
+            <Text style={styles.sectionHeaderTitle}>🎓 Did You Know?</Text>
+            <View style={styles.bulletRow}><Text style={styles.bulletDot}>•</Text><Text style={styles.previewLine}>Graduates earn 2x more in lifetime</Text></View>
+            <View style={styles.bulletRow}><Text style={styles.bulletDot}>•</Text><Text style={styles.previewLine}>80% of J&K toppers pursued higher studies</Text></View>
+            <TouchableOpacity onPress={() => setActiveTab('guidance')}>
+              <Text style={styles.linkText}>See Benefits of Graduation →</Text>
             </TouchableOpacity>
           </View>
 
-          {/* Highlights */}
+          {/* LOCAL INSPIRATION */}
           <View style={styles.sectionCard}>
-            <Text style={styles.sectionHeaderTitle}>🌟 Highlights</Text>
-            <View style={styles.highlightCard}><Text style={styles.highlightText}>Top Careers in Demand</Text></View>
-            <View style={styles.highlightCard}><Text style={styles.highlightText}>Upcoming Exam Deadlines</Text></View>
-            <View style={styles.highlightCard}><Text style={styles.highlightText}>Scholarships Available</Text></View>
+            <Text style={styles.sectionHeaderTitle}>🌟 Local Inspiration (Today)</Text>
+            <Text style={styles.previewLine}>{localSpot1}</Text>
+            <Text style={styles.previewLine}>{localSpot2}</Text>
+            <Text style={[styles.mutedNote, { marginTop: 6 }]}>🔄 Rotates daily</Text>
           </View>
 
-          {/* Dashboard Preview */}
+          {/* SUCCESS WALL (Carousel) */}
           <View style={styles.sectionCard}>
-            <Text style={styles.sectionHeaderTitle}>📊 Dashboard Preview</Text>
-            <Text style={styles.previewLine}>Exams: NEET → 15 Mar 2025</Text>
-            <Text style={styles.previewLine}>Colleges: NIT Srinagar</Text>
-            <Text style={styles.previewLine}>Updates: CBSE Results in May</Text>
-            <TouchableOpacity onPress={() => setActiveTab('plan')}>
-              <Text style={styles.linkText}>View More →</Text>
+            <Text style={styles.sectionHeaderTitle}>🏆 Success Wall</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {successStories.map((s) => (
+                <View key={s.name} style={styles.storyCard}>
+                  <View style={styles.storyAvatar}>
+                    <MaterialCommunityIcons name="account-circle" size={40} color="#1E3A5F" />
+                  </View>
+                  <Text style={styles.storyName}>{s.name}</Text>
+                  <Text style={styles.storyTag}>{s.tag}</Text>
+                </View>
+              ))}
+            </ScrollView>
+            <TouchableOpacity style={{ marginTop: 8 }}>
+              <Text style={styles.linkText}>View All Stories →</Text>
             </TouchableOpacity>
           </View>
 
-          {/* Success Stories / Quotes */}
+          {/* WHAT'S NEW */}
           <View style={styles.sectionCard}>
-            <Text style={styles.sectionHeaderTitle}>🎓 Success Stories</Text>
-            <Text style={styles.quoteLine}>“Aisha: From J&K to AI Engineer”</Text>
-            <Text style={styles.quoteLine}>“Stay consistent, success comes”</Text>
+            <Text style={styles.sectionHeaderTitle}>🔔 What's New</Text>
+            {newsFeed.map((n, i) => (<Text key={i} style={styles.previewLine}>{n}</Text>))}
+          </View>
+
+          {/* MOTIVATION CORNER */}
+          <View style={styles.sectionCard}>
+            <Text style={styles.sectionHeaderTitle}>✨ Motivation Corner</Text>
+            <Text style={styles.quoteLine}>Quote of the Day: “{quoteOfTheDay}”</Text>
           </View>
         </View>
         ) : activeTab === 'guidance' ? (
@@ -346,6 +401,8 @@ const styles = StyleSheet.create({
     color: '#1E3A5F',
     marginBottom: 10,
   },
+  bulletRow: { flexDirection: 'row', alignItems: 'flex-start', marginTop: 4 },
+  bulletDot: { color: '#1E3A5F', fontWeight: '900', marginRight: 6 },
   highlightCard: {
     backgroundColor: '#F8FAFC',
     borderWidth: 1,
@@ -358,6 +415,30 @@ const styles = StyleSheet.create({
 
   previewLine: { color: '#334155', marginTop: 4 },
   quoteLine: { color: '#334155', marginTop: 6, fontStyle: 'italic' },
+  mutedNote: { color: '#64748B', fontSize: 12 },
+
+  storyCard: {
+    width: 160,
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    padding: 12,
+    borderRadius: 12,
+    marginRight: 10,
+    alignItems: 'center',
+  },
+  storyAvatar: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#D6DEE8',
+  },
+  storyName: { color: '#0F172A', fontWeight: '800', marginTop: 8 },
+  storyTag: { color: '#334155', marginTop: 2, fontSize: 12, textAlign: 'center' },
   welcomeSection: {
     backgroundColor: '#FFFFFF',
     padding: 16,
