@@ -10,7 +10,8 @@ interface Props {
   onDone: () => void;
 }
 
-type Mode = 'menu' | 'login' | 'signup';
+type Mode = 'roleSelect' | 'menu' | 'login' | 'signup';
+type UserRole = 'student' | 'mentor' | 'guardian' | null;
 
 const FilledButton = ({ label, onPress, icon }:{ label: string; onPress?: () => void; icon?: any }) => (
   <TouchableOpacity style={styles.filledBtn} onPress={onPress} activeOpacity={0.9}>
@@ -33,7 +34,8 @@ const LinkButton = ({ label, onPress }:{ label: string; onPress?: () => void }) 
 );
 
 const AuthGate = ({ onDone }: Props) => {
-  const [mode, setMode] = useState<Mode>('menu');
+  const [mode, setMode] = useState<Mode>('roleSelect');
+  const [selectedRole, setSelectedRole] = useState<UserRole>(null);
   // Login form
   const [loginUser, setLoginUser] = useState('');
   const [loginPass, setLoginPass] = useState('');
@@ -65,7 +67,7 @@ const AuthGate = ({ onDone }: Props) => {
 
   const complete = async (profile: any) => {
     try {
-      await setItem('SS_USER_PROFILE', JSON.stringify(profile));
+      await setItem('SS_USER_PROFILE', JSON.stringify({ ...profile, role: selectedRole }));
       await setItem('SS_AUTH_DONE', '1');
     } catch {}
     onDone();
@@ -95,14 +97,35 @@ const AuthGate = ({ onDone }: Props) => {
     await complete({ username: 'Guest', name: 'Guest' });
   };
 
-  const Title = () => (
+
+  const onSelectRole = (role: UserRole) => {
+    setSelectedRole(role);
+    setMode('menu');
+  };
+
+  const Title = ({ showRoleSelection = false }) => (
     <View style={styles.titleBlock}>
       <View style={styles.logoCircle}>
         <MaterialIcons name="school" size={28} color={NAVY} />
       </View>
       <Text style={styles.title}>Welcome to Urooj</Text>
-      <Text style={styles.subtitle}>Find courses, colleges, scholarships and guidance</Text>
+      <Text style={styles.subtitle}>
+        {showRoleSelection 
+          ? "Choose your role to get personalized guidance" 
+          : "Find courses, colleges, scholarships and guidance"}
+      </Text>
     </View>
+  );
+
+  const RoleButton = ({ role, icon, label }:{ role: UserRole; icon: string; label: string }) => (
+    <TouchableOpacity 
+      style={styles.roleButton} 
+      onPress={() => onSelectRole(role)}
+      activeOpacity={0.9}
+    >
+      <MaterialIcons name={icon as any} size={24} color="#FFFFFF" />
+      <Text style={styles.roleButtonText}>{label}</Text>
+    </TouchableOpacity>
   );
 
   // Focus first field of each step when step changes
@@ -313,10 +336,46 @@ const AuthGate = ({ onDone }: Props) => {
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="always" keyboardDismissMode="none" removeClippedSubviews={false}>
         <View style={[styles.centerWrap, mode === 'signup' && { justifyContent: 'flex-start' }]}>
-          <Title />
+          <Title showRoleSelection={mode === 'roleSelect'} />
+
+          {mode === 'roleSelect' && (
+            <View style={styles.card}>
+              <Text style={styles.formTitle}>Choose your role</Text>
+              <View style={styles.rolesContainer}>
+                <RoleButton 
+                  role="student" 
+                  icon="school" 
+                  label="Student" 
+                />
+                <RoleButton 
+                  role="mentor" 
+                  icon="person" 
+                  label="Mentor" 
+                />
+                <RoleButton 
+                  role="guardian" 
+                  icon="family-restroom" 
+                  label="Parent/Guardian" 
+                />
+              </View>
+              <Text style={styles.terms}>Choose your role to get personalized guidance and features</Text>
+            </View>
+          )}
 
           {mode === 'menu' && (
             <View style={styles.card}>
+              {selectedRole && (
+                <View style={styles.selectedRoleInfo}>
+                  <MaterialIcons 
+                    name={selectedRole === 'student' ? 'school' : selectedRole === 'mentor' ? 'person' : 'family-restroom'} 
+                    size={20} 
+                    color={NAVY} 
+                  />
+                  <Text style={styles.selectedRoleText}>
+                    Continuing as {selectedRole === 'guardian' ? 'Parent/Guardian' : selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)}
+                  </Text>
+                </View>
+              )}
               <FilledButton label="Login" icon="login" onPress={() => setMode('login')} />
               <OutlineButton label="Sign up" icon="person-add" onPress={() => { setMode('signup'); setStep(0); }} />
               <OutlineButton label="Skip login" icon="arrow-forward" onPress={onSkip} />
@@ -501,6 +560,46 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     flex: 1,
     color: '#111827',
+  },
+  rolesContainer: {
+    gap: 12,
+    marginBottom: 16,
+  },
+  roleButton: {
+    backgroundColor: NAVY,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    marginBottom: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.12,
+    shadowRadius: 5,
+    elevation: 4,
+  },
+  roleButtonText: {
+    color: '#FFFFFF',
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  selectedRoleInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F0F9FF',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+    gap: 8,
+  },
+  selectedRoleText: {
+    color: NAVY,
+    fontWeight: '600',
+    fontSize: 14,
   },
 });
 
