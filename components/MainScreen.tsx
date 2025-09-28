@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image, ScrollView, Animated } from 'react-native';
 import { MaterialCommunityIcons, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import GuidanceScreen from './GuidanceScreen';
+import PwDSupportScreen from './PwDSupportScreen';
 import CoursesCollegesScreen from './CoursesCollegesScreen';
 import PlanScreen from './PlanScreen';
 import UpdatesScreen from './UpdatesScreen';
@@ -23,6 +24,7 @@ const MainScreen = ({ onBackToRoleSelection, onLogout = () => {} }: Props) => {
   const [activeTab, setActiveTab] = useState<TabKey>('home');
   const jump = useRef(new Animated.Value(0)).current;
   const [updatesBadge, setUpdatesBadge] = useState<{ unread: number; saved: number }>({ unread: 0, saved: 0 });
+  const [isPwd, setIsPwd] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
 
@@ -90,6 +92,7 @@ const MainScreen = ({ onBackToRoleSelection, onLogout = () => {} }: Props) => {
         const raw = await getItem('SS_USER_PROFILE');
         if (raw) {
           const profile = JSON.parse(raw);
+          setIsPwd(!!profile?.isPwd);
           const currentUsername: string | null = profile?.username ? String(profile.username) : null;
           const currentName: string | null = profile?.name ? String(profile.name) : null;
           let friendly = currentUsername || currentName;
@@ -188,6 +191,10 @@ const MainScreen = ({ onBackToRoleSelection, onLogout = () => {} }: Props) => {
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {activeTab === 'home' ? (
         <View style={styles.content}>
+          {isPwd ? (
+            <PwDSupportScreen />
+          ) : (
+            <>
           {/* HERO SECTION */}
           <View style={styles.heroBanner}>
             <Text style={styles.heroTitle}>Your Future, Your Choice 🚀</Text>
@@ -250,6 +257,8 @@ const MainScreen = ({ onBackToRoleSelection, onLogout = () => {} }: Props) => {
             <Text style={styles.sectionHeaderTitle}>✨ Motivation Corner</Text>
             <Text style={styles.quoteLine}>Quote of the Day: “{quoteOfTheDay}”</Text>
           </View>
+          </>
+          )}
         </View>
         ) : activeTab === 'guidance' ? (
           <GuidanceScreen />
