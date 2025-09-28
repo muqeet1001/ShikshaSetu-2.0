@@ -15,7 +15,11 @@ const AnimatedTouchableOpacity: any = Animated.createAnimatedComponent(Touchable
 
 type TabKey = 'home' | 'guidance' | 'courses' | 'plan' | 'updates';
 
-const MainScreen = () => {
+interface Props {
+  onBackToRoleSelection?: () => void;
+}
+
+const MainScreen = ({ onBackToRoleSelection, onLogout = () => {} }: Props) => {
   const [activeTab, setActiveTab] = useState<TabKey>('home');
   const jump = useRef(new Animated.Value(0)).current;
   const [updatesBadge, setUpdatesBadge] = useState<{ unread: number; saved: number }>({ unread: 0, saved: 0 });
@@ -115,6 +119,13 @@ const MainScreen = () => {
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
+          {/* Back Button - only show if callback provided */}
+          {onBackToRoleSelection && (
+            <TouchableOpacity style={styles.backButton} onPress={onBackToRoleSelection}>
+              <MaterialIcons name="arrow-back" size={24} color="#FFFFFF" />
+            </TouchableOpacity>
+          )}
+          
           {/* J&K Government Logo */}
           <View style={styles.headerLogoWrapper}>
             <Image 
@@ -134,7 +145,7 @@ const MainScreen = () => {
           </TouchableOpacity>
           
           {/* Profile Icon */}
-          <TouchableOpacity style={styles.headerIcon} onPress={() => setProfileOpen(true)}>
+          <TouchableOpacity style={styles.headerIcon} onPress={() => setProfileOpen(true)} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
             <MaterialCommunityIcons name="account-circle-outline" size={24} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
@@ -144,6 +155,7 @@ const MainScreen = () => {
       <ProfileEditor
         visible={profileOpen}
         onClose={() => setProfileOpen(false)}
+        onLogout={() => { setProfileOpen(false); onLogout && onLogout(); }}
         onSaved={() => {
           // refresh greeting immediately
           (async () => {
@@ -242,11 +254,11 @@ const MainScreen = () => {
         ) : activeTab === 'guidance' ? (
           <GuidanceScreen />
         ) : activeTab === 'courses' ? (
-          <CoursesCollegesScreen />
+          <CoursesCollegesScreen onOpenProfile={() => setProfileOpen(true)} />
         ) : activeTab === 'plan' ? (
           <PlanScreen />
         ) : (
-          <UpdatesScreen />
+          <UpdatesScreen onOpenProfile={() => setProfileOpen(true)} />
         )}
       </ScrollView>
 
@@ -351,6 +363,12 @@ const styles = StyleSheet.create({
   headerIcon: {
     marginLeft: 16,
     padding: 4,
+  },
+  backButton: {
+    padding: 8,
+    marginRight: 8,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
   scrollView: {
     flex: 1,

@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 1000, // above cards
-    elevation: 6, // ensure above cards on Android (cards use elevation 4)
+    zIndex: -1, // keep watermark behind all interactive content
+    elevation: 0,
   },
   image: {
     width: BASE_SIZE,

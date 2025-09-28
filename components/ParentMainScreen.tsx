@@ -1,67 +1,44 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { MaterialIcons, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import MentorDashboard from './MentorDashboard';
-import MentorForum from './MentorForum';
-import MentorMentorship from './MentorMentorship';
-import MentorTraining from './MentorTraining';
+import ParentDashboard from './ParentDashboard';
 import Watermark from './Watermark';
+import ParentForumDiscussions from './ParentForumDiscussions';
+import CoursesCollegesScreen from './CoursesCollegesScreen';
+import UpdatesScreen from './UpdatesScreen';
 import ProfileEditor from './ProfileEditor';
+import { removeItem } from '../utils/storage';
 
 const NAVY = '#1E3A5F';
 const NAVY_DARK = '#0F2A3F';
-
-type Tab = 'dashboard' | 'forum' | 'mentorship' | 'training';
 
 interface Props {
   onBackToRoleSelection: () => void;
   onLogout: () => void;
 }
 
-const MentorMainScreen = ({ onBackToRoleSelection, onLogout = () => {} }: Props) => {
-const [activeTab, setActiveTab] = useState<Tab>('dashboard');
-  const [profileOpen, setProfileOpen] = useState(false);
-
-  const tabs = [
-    { id: 'dashboard', label: 'Dashboard', icon: 'home' },
-    { id: 'forum', label: 'Forum', icon: 'forum' },
-    { id: 'mentorship', label: 'Mentorship', icon: 'school' },
-    { id: 'training', label: 'Training', icon: 'library-books' },
-  ];
-
-  const handleNavigateToTab = (tabId: Tab) => {
-    setActiveTab(tabId);
-  };
+const ParentMainScreen = ({ onBackToRoleSelection, onLogout }: Props) => {
+  const [active, setActive] = useState<'dashboard' | 'forum' | 'courses' | 'colleges' | 'updates'>('dashboard');
+  const [showProfile, setShowProfile] = useState(false);
 
   const handleNotificationPress = () => {
-    // TODO: Show notifications modal or navigate to notifications
-    console.log('Notifications pressed');
+    setActive('updates');
   };
-
 
   const handleProfilePress = () => {
-    setProfileOpen(true);
+    setShowProfile(true);
   };
 
-  const renderActiveComponent = () => {
-    switch (activeTab) {
-      case 'dashboard':
-        return <MentorDashboard onNavigateToTab={handleNavigateToTab} />;
-      case 'forum':
-        return <MentorForum onNavigateToTab={handleNavigateToTab} />;
-      case 'mentorship':
-        return <MentorMentorship onNavigateToTab={handleNavigateToTab} />;
-      case 'training':
-        return <MentorTraining onNavigateToTab={handleNavigateToTab} />;
-      default:
-        return <MentorDashboard onNavigateToTab={handleNavigateToTab} />;
-    }
+  const handleLogout = async () => {
+    console.log('[ParentMainScreen] handleLogout called');
+    setShowProfile(false);
+    onLogout();
   };
 
   return (
     <View style={styles.container}>
       <Watermark />
-      {/* Header matching student app */}
+      {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           {/* Back Button */}
@@ -83,7 +60,7 @@ const [activeTab, setActiveTab] = useState<Tab>('dashboard');
         
         <View style={styles.headerRight}>
           {/* Notification Icon */}
-          <TouchableOpacity style={styles.headerIcon} onPress={handleNotificationPress}>
+          <TouchableOpacity style={styles.headerIcon} onPress={handleNotificationPress} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
             <Ionicons name="notifications-outline" size={24} color="#FFFFFF" />
           </TouchableOpacity>
           
@@ -96,35 +73,29 @@ const [activeTab, setActiveTab] = useState<Tab>('dashboard');
 
       {/* Content Area */}
       <View style={styles.content}>
-        {renderActiveComponent()}
+        {active === 'dashboard' && (
+          <ParentDashboard
+            onOpenForum={() => setActive('forum')}
+            onOpenCourses={() => setActive('courses')}
+            onOpenColleges={() => setActive('colleges')}
+          />
+        )}
+        {active === 'forum' && (
+          <ParentForumDiscussions onBack={() => setActive('dashboard')} onOpenProfile={() => setShowProfile(true)} />
+        )}
+        {(active === 'courses' || active === 'colleges') && (
+          <CoursesCollegesScreen
+            initialTab={active === 'courses' ? 'courses' : 'colleges'}
+            onBack={() => setActive('dashboard')}
+            onOpenProfile={() => setShowProfile(true)}
+          />
+        )}
+        {active === 'updates' && (
+          <UpdatesScreen onBack={() => setActive('dashboard')} onOpenProfile={() => setShowProfile(true)} />
+        )}
       </View>
 
-      {/* Profile Modal */}
-      <ProfileEditor visible={profileOpen} onClose={() => setProfileOpen(false)} onLogout={() => { setProfileOpen(false); onLogout(); }} />
-
-      {/* Bottom Tab Navigation matching student app */}
-      <View style={styles.bottomNav}>
-        {tabs.map((tab) => (
-          <TouchableOpacity
-            key={tab.id}
-            style={styles.navItem}
-            onPress={() => setActiveTab(tab.id as Tab)}
-            activeOpacity={0.7}
-          >
-            <MaterialIcons
-              name={tab.icon as any}
-              size={24}
-              color={activeTab === tab.id ? '#FFFFFF' : '#B0B0B0'}
-            />
-            <Text style={[
-              styles.navText,
-              activeTab === tab.id && styles.activeNavText
-            ]}>
-              {tab.label.toUpperCase()}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <ProfileEditor visible={showProfile} onClose={() => setShowProfile(false)} onLogout={handleLogout} />
     </View>
   );
 };
@@ -190,30 +161,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
-  bottomNav: {
-    flexDirection: 'row',
-    backgroundColor: '#1E3A5F',
-    borderTopWidth: 1,
-    borderTopColor: '#0F2A3F',
-    paddingVertical: 12,
-    paddingHorizontal: 4,
-  },
-  navItem: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 8,
-  },
-  navText: {
-    fontSize: 10,
-    marginTop: 4,
-    textAlign: 'center',
-    color: '#B0B0B0',
-    fontWeight: '500',
-  },
-  activeNavText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-  },
 });
 
-export default MentorMainScreen;
+export default ParentMainScreen;

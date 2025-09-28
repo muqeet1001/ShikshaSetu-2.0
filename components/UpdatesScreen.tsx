@@ -92,7 +92,9 @@ const UpdateCard: React.FC<{ u: any; onPress?: () => void; onPrimary?: () => voi
   </TouchableOpacity>
 );
 
-const UpdatesScreen = () => {
+interface Props { onBack?: () => void; onOpenProfile?: () => void }
+
+const UpdatesScreen = ({ onBack, onOpenProfile }: Props) => {
   const [filterIdx, setFilterIdx] = useState(0);
   const [readIds, setReadIds] = useState<string[]>([]); // array of update ids
   const [savedIds, setSavedIds] = useState<string[]>([]); // array of update ids
@@ -214,9 +216,21 @@ const UpdatesScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* Page Title */}
-      <View style={styles.headerBlock}>
-        <Text style={styles.pageTitle}>Latest Updates & Notifications</Text>
+      <View style={[styles.headerBlock, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }]}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {onBack && (
+            <TouchableOpacity style={[styles.backRow, { marginBottom: 0, marginRight: 8 }]} onPress={onBack}>
+              <MaterialIcons name="arrow-back-ios" size={18} color={NAVY} />
+              <Text style={styles.backText}>Back</Text>
+            </TouchableOpacity>
+          )}
+          <Text style={styles.pageTitle}>Latest Updates & Notifications</Text>
+        </View>
+        {onOpenProfile && (
+          <TouchableOpacity onPress={onOpenProfile} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+            <MaterialIcons name="account-circle" size={24} color={NAVY} />
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* Summary */}

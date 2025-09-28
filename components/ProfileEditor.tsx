@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Modal, View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Platform, KeyboardAvoidingView } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Modal, View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Platform, KeyboardAvoidingView, Animated, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { getItem, setItem } from '../utils/storage';
 
@@ -9,6 +9,7 @@ interface Props {
   visible: boolean;
   onClose: () => void;
   onSaved?: () => void;
+  onLogout?: () => void;
 }
 
 const FilledButton = ({ label, onPress, icon }:{ label: string; onPress?: () => void; icon?: any }) => (
@@ -25,7 +26,14 @@ const OutlineButton = ({ label, onPress, icon }:{ label: string; onPress?: () =>
   </TouchableOpacity>
 );
 
-const ProfileEditor = ({ visible, onClose, onSaved }: Props) => {
+const DangerButton = ({ label, onPress, icon }:{ label: string; onPress?: () => void; icon?: any }) => (
+  <TouchableOpacity style={styles.dangerBtn} onPress={onPress} activeOpacity={0.9}>
+    {icon && <MaterialIcons name={icon as any} size={18} color="#FFFFFF" style={{ marginRight: 8 }} />}
+    <Text style={styles.dangerBtnText}>{label}</Text>
+  </TouchableOpacity>
+);
+
+const ProfileEditor = ({ visible, onClose, onSaved, onLogout = () => {} }: Props) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [currentClass, setCurrentClass] = useState('');
@@ -34,6 +42,21 @@ const ProfileEditor = ({ visible, onClose, onSaved }: Props) => {
   const [marks12, setMarks12] = useState('');
   const [district, setDistrict] = useState('');
   const [area, setArea] = useState('');
+
+  // animate modal card in
+  const anim = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    if (visible) {
+      Animated.spring(anim, {
+        toValue: 1,
+        useNativeDriver: true,
+        friction: 8,
+        tension: 40,
+      }).start();
+    } else {
+      anim.setValue(0);
+    }
+  }, [visible]);
 
   useEffect(() => {
     if (!visible) return;
@@ -77,11 +100,29 @@ const ProfileEditor = ({ visible, onClose, onSaved }: Props) => {
     onClose();
   };
 
+  const confirmLogout = () => {
+    if (!onLogout) return onClose();
+    console.log('[ProfileEditor] Logout pressed');
+    Alert.alert('Logout', 'Are you sure you want to logout?', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Logout', style: 'destructive', onPress: () => { console.log('[ProfileEditor] Logout confirmed'); onLogout(); } },
+    ]);
+  };
+
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose} transparent>
       <View style={styles.backdrop}>
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
-          <View style={styles.modalCard}>
+          <Animated.View style={[
+            styles.modalCard,
+            {
+              opacity: anim,
+              transform: [
+                { scale: anim.interpolate({ inputRange: [0, 1], outputRange: [0.96, 1] }) },
+                { translateY: anim.interpolate({ inputRange: [0, 1], outputRange: [20, 0] }) },
+              ],
+            },
+          ]}>
             <Text style={styles.title}>Edit Profile</Text>
             <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 16 }} keyboardShouldPersistTaps="always">
               <View style={styles.inputRow}>
@@ -117,11 +158,12 @@ const ProfileEditor = ({ visible, onClose, onSaved }: Props) => {
                 <TextInput value={area} onChangeText={setArea} placeholder="Area" style={styles.input} blurOnSubmit={false} />
               </View>
             </ScrollView>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap' }}>
               <OutlineButton label="Close" icon="close" onPress={onClose} />
-              <FilledButton label="Save" icon="save" onPress={save} />
+              <DangerButton label="Logout" icon="logout" onPress={confirmLogout} />
+              <FilledButton label="Edit Profile" icon="save" onPress={save} />
             </View>
-          </View>
+          </Animated.View>
         </KeyboardAvoidingView>
       </View>
     </Modal>
@@ -138,6 +180,8 @@ const styles = StyleSheet.create({
   filledBtnText: { color: '#FFFFFF', fontWeight: '800' },
   outlineBtn: { backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: NAVY, paddingVertical: 12, paddingHorizontal: 14, borderRadius: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 10 },
   outlineBtnText: { color: NAVY, fontWeight: '800' },
+  dangerBtn: { backgroundColor: '#DC2626', paddingVertical: 12, paddingHorizontal: 14, borderRadius: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 10 },
+  dangerBtnText: { color: '#FFFFFF', fontWeight: '800' },
 });
 
 export default ProfileEditor;

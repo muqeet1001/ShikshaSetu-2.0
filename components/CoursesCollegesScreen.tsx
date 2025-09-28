@@ -89,8 +89,14 @@ const alumniData: Record<string, Record<string, Array<{ id: string; name: string
   },
 };
 
-const CoursesCollegesScreen = () => {
-  const [screen, setScreen] = useState<'courses' | 'colleges' | 'courseDetail' | 'collegeDetail' | 'compare' | 'map' | 'alumniList' | 'alumniProfile'>('courses');
+interface Props {
+  initialTab?: 'courses' | 'colleges';
+  onBack?: () => void;
+  onOpenProfile?: () => void;
+}
+
+const CoursesCollegesScreen = ({ initialTab = 'courses', onBack, onOpenProfile }: Props) => {
+  const [screen, setScreen] = useState<'courses' | 'colleges' | 'courseDetail' | 'collegeDetail' | 'compare' | 'map' | 'alumniList' | 'alumniProfile'>(initialTab);
   const [selectedCourse, setSelectedCourse] = useState<any>(null);
   const [selectedCollege, setSelectedCollege] = useState<any>(null);
   const [selectedAlumni, setSelectedAlumni] = useState<any>(null);
@@ -441,9 +447,21 @@ const CollegeCard: React.FC<{ col: any }> = ({ col }) => (
 
   return (
     <View style={styles.container}>
-      {/* Page Title */}
-      <View style={styles.headerBlock}>
-        <Text style={styles.pageTitle}>Explore Courses & Colleges</Text>
+      <View style={[styles.headerBlock, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }]}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {onBack && (
+            <TouchableOpacity style={[styles.backRow, { marginBottom: 0, marginRight: 8 }]} onPress={onBack}>
+              <MaterialIcons name="arrow-back-ios" size={18} color={NAVY} />
+              <Text style={styles.backText}>Back</Text>
+            </TouchableOpacity>
+          )}
+          <Text style={styles.pageTitle}>Explore Courses & Colleges</Text>
+        </View>
+        {onOpenProfile && (
+          <TouchableOpacity onPress={onOpenProfile} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+            <MaterialIcons name="account-circle" size={24} color={NAVY} />
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* Toggle */}
