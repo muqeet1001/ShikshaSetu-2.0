@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { setItem } from '../utils/storage';
+import { getItem, setItem } from '../utils/storage';
 
 const NAVY = '#1E3A5F';
 const NAVY_DARK = '#0F2A3F';
@@ -10,7 +10,7 @@ interface Props {
   onDone: () => void;
 }
 
-type Mode = 'roleSelect' | 'menu' | 'login' | 'signup';
+type Mode = 'roleSelect' | 'studentType' | 'pwdInfo' | 'menu' | 'login' | 'signup';
 type UserRole = 'student' | 'mentor' | 'guardian' | null;
 
 const FilledButton = ({ label, onPress, icon }:{ label: string; onPress?: () => void; icon?: any }) => (
@@ -98,9 +98,9 @@ const AuthGate = ({ onDone }: Props) => {
   };
 
 
-  const onSelectRole = (role: UserRole) => {
+const onSelectRole = (role: UserRole) => {
     setSelectedRole(role);
-    setMode('menu');
+    if (role === 'student') setMode('studentType'); else setMode('menu');
   };
 
   const Title = ({ showRoleSelection = false }) => (
@@ -362,6 +362,31 @@ const AuthGate = ({ onDone }: Props) => {
             </View>
           )}
 
+          {mode === 'studentType' && (
+            <View style={styles.card}>
+              <Text style={styles.formTitle}>Select student type</Text>
+              <View style={{ gap: 10 }}>
+                <TouchableOpacity style={[styles.roleButton, { width: '100%' }]} onPress={() => setMode('menu')} activeOpacity={0.9}>
+                  <MaterialIcons name="school" size={24} color="#FFFFFF" />
+                  <Text style={styles.roleButtonText}>Normal Student</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.roleButton, { width: '100%' }]} onPress={() => setMode('pwdInfo')} activeOpacity={0.9}>
+                  <MaterialIcons name="accessible" size={24} color="#FFFFFF" />
+                  <Text style={styles.roleButtonText}>Disabled Student</Text>
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.terms}>You can change this later from profile</Text>
+            </View>
+          )}
+
+          {mode === 'pwdInfo' && (
+            <View style={styles.card}>
+              <Text style={styles.formTitle}>Disability Information</Text>
+              <PwdInfo onDone={onDone} />
+              <LinkButton label="Back" onPress={() => setMode('studentType')} />
+            </View>
+          )}
+
           {mode === 'menu' && (
             <View style={styles.card}>
               {selectedRole && (
@@ -602,5 +627,41 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
+
+// PwD Info subcomponent
+const PWD_TYPES = ['Visual Impairment','Hearing Impairment','Physical / Mobility','Learning Disability','Multiple Disabilities'];
+const PWD_PERCENT = ['<40%','40–60%','60–80%','80%+'];
+
+const PwdInfo: React.FC<{ onDone: () => void }> = ({ onDone }) => {
+  const [typeIdx, setTypeIdx] = React.useState(0);
+  const [pctIdx, setPctIdx] = React.useState(1);
+  const save = async () => {
+    try {
+      const raw = await getItem('SS_USER_PROFILE');
+      const base = raw ? JSON.parse(raw) : {};
+      const profile = { ...base, isPwd: true, pwdType: PWD_TYPES[typeIdx], pwdPercent: PWD_PERCENT[pctIdx], role: 'student' };
+      await setItem('SS_USER_PROFILE', JSON.stringify(profile));
+      await setItem('SS_AUTH_DONE', '1');
+    } catch {}
+    onDone();
+  };
+  return (
+    <View>
+      <Text style={{ color: '#374151', marginBottom: 8 }}>👤 Disability Type</Text>
+      <TouchableOpacity style={styles.inputRow} onPress={() => setTypeIdx((typeIdx + 1) % PWD_TYPES.length)}>
+        <MaterialIcons name="arrow-drop-down" size={20} color={NAVY} />
+        <Text style={{ marginLeft: 6, color: NAVY, fontWeight: '700' }}>{PWD_TYPES[typeIdx]}</Text>
+      </TouchableOpacity>
+      <Text style={{ color: '#374151', marginVertical: 8 }}>📊 Disability Percentage</Text>
+      <TouchableOpacity style={styles.inputRow} onPress={() => setPctIdx((pctIdx + 1) % PWD_PERCENT.length)}>
+        <MaterialIcons name="arrow-drop-down" size={20} color={NAVY} />
+        <Text style={{ marginLeft: 6, color: NAVY, fontWeight: '700' }}>{PWD_PERCENT[pctIdx]}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.filledBtn} onPress={save}>
+        <Text style={styles.filledBtnText}>Save & Continue</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 export default AuthGate;

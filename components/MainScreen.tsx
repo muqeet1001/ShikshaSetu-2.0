@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image, ScrollView
 import { MaterialCommunityIcons, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import GuidanceScreen from './GuidanceScreen';
 import PwDSupportScreen from './PwDSupportScreen';
+import StudentMentorsScreen from './StudentMentorsScreen';
 import CoursesCollegesScreen from './CoursesCollegesScreen';
 import PlanScreen from './PlanScreen';
 import UpdatesScreen from './UpdatesScreen';
@@ -14,7 +15,7 @@ import ProfileEditor from './ProfileEditor';
 const { width, height } = Dimensions.get('window');
 const AnimatedTouchableOpacity: any = Animated.createAnimatedComponent(TouchableOpacity);
 
-type TabKey = 'home' | 'guidance' | 'courses' | 'plan' | 'updates';
+type TabKey = 'home' | 'guidance' | 'courses' | 'plan' | 'mentors';
 
 interface Props {
   onBackToRoleSelection?: () => void;
@@ -267,7 +268,7 @@ const MainScreen = ({ onBackToRoleSelection, onLogout = () => {} }: Props) => {
         ) : activeTab === 'plan' ? (
           <PlanScreen />
         ) : (
-          <UpdatesScreen onOpenProfile={() => setProfileOpen(true)} />
+          <StudentMentorsScreen />
         )}
       </ScrollView>
 
@@ -305,16 +306,9 @@ const MainScreen = ({ onBackToRoleSelection, onLogout = () => {} }: Props) => {
           <Text style={[styles.navText, activeTab === 'courses' && styles.activeNavText]}>COURSES & COLLEGES</Text>
         </TouchableOpacity>
         
-        <TouchableOpacity style={styles.navItem} onPress={() => setActiveTab('updates')}>
-          <View style={styles.iconWithBadge}>
-            <MaterialIcons name="update" size={24} color={activeTab === 'updates' ? '#FFFFFF' : '#B0B0B0'} />
-            {updatesBadge.unread > 0 && (
-              <View style={styles.badge}>
-                <Text style={styles.badgeText}>{updatesBadge.unread > 99 ? '99+' : String(updatesBadge.unread)}</Text>
-              </View>
-            )}
-          </View>
-          <Text style={[styles.navText, activeTab === 'updates' && styles.activeNavText]}>UPDATES</Text>
+        <TouchableOpacity style={styles.navItem} onPress={() => setActiveTab('mentors')}>
+          <MaterialIcons name="group" size={24} color={activeTab === 'mentors' ? '#FFFFFF' : '#B0B0B0'} />
+          <Text style={[styles.navText, activeTab === 'mentors' && styles.activeNavText]}>MENTORS</Text>
         </TouchableOpacity>
       </View>
     </View>
