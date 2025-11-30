@@ -124,6 +124,8 @@ const SplashScreen = () => {
         >
           {MESSAGES[msgIndex]}
         </AText>
+        {/* Developer credit */}
+        <Text style={styles.developerText}>Created by Muqeet — GitHub: @muqeet1001</Text>
       </View>
     </View>
   );
@@ -206,6 +208,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     letterSpacing: 0.2,
+    textAlign: 'center',
+  },
+  developerText: {
+    marginTop: 18,
+    fontSize: 12,
+    color: '#BFD6FF',
+    opacity: 0.95,
     textAlign: 'center',
   },
 });
